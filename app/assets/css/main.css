@@ -1,0 +1,471 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ─────────────────────────────────────────────
+   FIGMA DESIGN TOKENS: raw palette
+   ───────────────────────────────────────────── */
+:root {
+  /* Text */
+  --text-90: #252525;
+  --text-70: #666666;
+  --text-00: #ffffff;
+
+  --text-dark-blue: #000080;
+  --oxford-blue: #002147;
+
+  /* Brand Primary (navy → light blue) */
+  --primary-90: #083858;
+  --primary-80: #091a2e;
+  --primary-65: #0f3864;
+  --primary-50: #156b87;
+  --primary-30: #5da1f1;
+  --primary-20: #a4cff4;
+  --primary-10: #a8d1ff;
+
+  /* Brand Secondary (dark teal → light cyan) */
+  --secondary-80: #0e5458;
+  --secondary-70: #1e9094;
+  --secondary-50: #2bced4;
+  --secondary-30: #7de0e4;
+  --secondary-10: #aae6ee;
+
+  /* Neutral */
+  --neutral-90: #252525;
+  --neutral-70: #666666;
+  --neutral-30: #d6d6d6;
+  --neutral-10: #f2f2f2;
+  --neutral-00: #ffffff;
+
+  /* Semantic */
+  --semantic-error: #e60000;
+  --semantic-warning: #ff9900;
+  --semantic-success: #008000;
+  --semantic-information: #0080ff;
+
+  /* Status / state colours */
+  --status-fundraising-bar: #0080ff;
+  --status-fundraising-badge: #0080ff;
+  --status-trading-badge: #008000;
+  --status-milestone-bar: #00e600;
+  --status-failed: #e60000;
+  --status-urgent: #ff9900;
+  --status-creator: #874fff;
+
+  /* Semantic backgrounds (HTML 90% opacity variants) */
+  --semantic-error-bg: #ffcccc;
+  --semantic-warning-bg: #ffebcc;
+  --semantic-success-bg: #ccffcc;
+  --semantic-information-bg: #cce6ff;
+
+  /* ── shadcn semantic aliases (light mode) ── */
+  --background: #ffffff;
+  --foreground: #252525;
+  --card: #ffffff;
+  --card-foreground: #252525;
+  --popover: #ffffff;
+  --popover-foreground: #252525;
+  --primary: #083858;
+  --primary-foreground: #ffffff;
+  --secondary: #1e9094;
+  --secondary-foreground: #ffffff;
+  --muted: #f2f2f2;
+  --muted-foreground: #666666;
+  --accent: #a4cff4;
+  --accent-foreground: #083858;
+  --destructive: #e60000;
+  --destructive-foreground: #ffffff;
+  --border: #d6d6d6;
+  --input: #d6d6d6;
+  --ring: #156b87;
+
+  /* Chart */
+  --chart-1: #083858;
+  --chart-2: #1e9094;
+  --chart-3: #156b87;
+  --chart-4: #2bced4;
+  --chart-5: #aae6ee;
+
+  /* Radius */
+  --radius: 0.5rem;
+
+  /* Sidebar */
+  --sidebar: #f2f2f2;
+  --sidebar-foreground: #252525;
+  --sidebar-primary: #083858;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #a4cff4;
+  --sidebar-accent-foreground: #083858;
+  --sidebar-border: #d6d6d6;
+  --sidebar-ring: #156b87;
+
+  /* ── Spacing tokens (Desktop default) ── */
+  --space-section: 64px;
+  --space-container: 64px;
+  --space-content: 48px;
+  --space-element: 32px;
+  --space-inner: 24px;
+  --space-small: 16px;
+  --space-tiny: 8px;
+}
+
+/* ── Dark mode palette overrides ── */
+.dark {
+  /* Text */
+  --text-90: #ffffff;
+  --text-70: #666666;
+  --text-00: #252525;
+
+  /* Brand Primary — inverted for dark */
+  --primary-90: #a4cff4;
+  --primary-20: #083958;
+
+  /* shadcn semantic aliases (dark mode) */
+  --background: #0a1929;
+  --foreground: #ffffff;
+  --card: #0d2137;
+  --card-foreground: #ffffff;
+  --popover: #0d2137;
+  --popover-foreground: #ffffff;
+  --primary: #a4cff4;
+  --primary-foreground: #083858;
+  --secondary: #1e9094;
+  --secondary-foreground: #ffffff;
+  --muted: #0d2137;
+  --muted-foreground: #aaa;
+  --accent: #156b87;
+  --accent-foreground: #ffffff;
+  --destructive: #e60000;
+  --destructive-foreground: #ffffff;
+  --border: rgb(255 255 255 / 10%);
+  --input: rgb(255 255 255 / 15%);
+  --ring: #2bced4;
+
+  /* Chart */
+  --chart-1: #a4cff4;
+  --chart-2: #2bced4;
+  --chart-3: #156b87;
+  --chart-4: #1e9094;
+  --chart-5: #0e5458;
+
+  /* Sidebar */
+  --sidebar: #0d2137;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #a4cff4;
+  --sidebar-primary-foreground: #083858;
+  --sidebar-accent: #156b87;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgb(255 255 255 / 10%);
+  --sidebar-ring: #2bced4;
+}
+
+/* ── Responsive spacing tokens ── */
+@media (max-width: 1279px) {
+  :root {
+    --space-section: 40px;
+    --space-container: 56px;
+    --space-content: 32px;
+    --space-element: 24px;
+    --space-inner: 24px;
+  }
+}
+
+@media (max-width: 799px) {
+  :root {
+    --space-section: 24px;
+    --space-container: 48px;
+    --space-content: 32px;
+    --space-element: 24px;
+    --space-inner: 24px;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   TAILWIND V4 THEME MAPPING
+   ───────────────────────────────────────────── */
+@theme inline {
+  /* Font */
+  --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, monospace;
+  --font-heading: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+
+  /* shadcn semantic color aliases → Tailwind utilities */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Brand palette utilities: bg-brand-primary-90, text-brand-secondary-70, etc. */
+  --color-brand-primary-90: var(--primary-90);
+  --color-brand-primary-80: var(--primary-80);
+  --color-brand-primary-65: var(--primary-65);
+  --color-brand-primary-50: var(--primary-50);
+  --color-brand-primary-30: var(--primary-30);
+  --color-brand-primary-20: var(--primary-20);
+  --color-brand-primary-10: var(--primary-10);
+
+  --color-brand-secondary-80: var(--secondary-80);
+  --color-brand-secondary-70: var(--secondary-70);
+  --color-brand-secondary-50: var(--secondary-50);
+  --color-brand-secondary-30: var(--secondary-30);
+  --color-brand-secondary-10: var(--secondary-10);
+
+  --color-neutral-90: var(--neutral-90);
+  --color-neutral-70: var(--neutral-70);
+  --color-neutral-30: var(--neutral-30);
+  --color-neutral-10: var(--neutral-10);
+  --color-neutral-00: var(--neutral-00);
+
+  --color-text-90: var(--text-90);
+  --color-text-70: var(--text-70);
+  --color-text-00: var(--text-00);
+  --color-dark-blue: var(--text-dark-blue);
+  --color-oxford-blue: var(--oxford-blue);
+
+  --color-semantic-error: var(--semantic-error);
+  --color-semantic-warning: var(--semantic-warning);
+  --color-semantic-success: var(--semantic-success);
+  --color-semantic-information: var(--semantic-information);
+  --color-semantic-error-bg: var(--semantic-error-bg);
+  --color-semantic-warning-bg: var(--semantic-warning-bg);
+  --color-semantic-success-bg: var(--semantic-success-bg);
+  --color-semantic-information-bg: var(--semantic-information-bg);
+
+  /* Status / state colour utilities */
+  --color-status-fundraising-bar: var(--status-fundraising-bar);
+  --color-status-fundraising-badge: var(--status-fundraising-badge);
+  --color-status-trading-badge: var(--status-trading-badge);
+  --color-status-milestone-bar: var(--status-milestone-bar);
+  --color-status-failed: var(--status-failed);
+  --color-status-urgent: var(--status-urgent);
+  --color-status-creator: var(--status-creator);
+
+  /* Spacing utilities */
+  --spacing-section: var(--space-section);
+  --spacing-container: var(--space-container);
+  --spacing-content: var(--space-content);
+  --spacing-element: var(--space-element);
+  --spacing-inner: var(--space-inner);
+  --spacing-small: var(--space-small);
+  --spacing-tiny: var(--space-tiny);
+
+  /* Radius */
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) * 1.5);
+  --radius-xl: calc(var(--radius) * 2);
+  --radius-2xl: calc(var(--radius) * 3);
+  --radius-full: 9999px;
+}
+
+/* ─────────────────────────────────────────────
+   BASE STYLES
+   ───────────────────────────────────────────── */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   TYPOGRAPHY UTILITY CLASSES
+   Responsive: Desktop >= 1280px, Tablet >= 800px, Mobile < 800px
+   ───────────────────────────────────────────── */
+@layer utilities {
+  /* Display */
+  .text-display {
+    font-family: var(--font-sans);
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  /* Heading L */
+  .text-heading-l {
+    font-family: var(--font-sans);
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  /* Heading M */
+  .text-heading-m {
+    font-family: var(--font-sans);
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  /* Heading S */
+  .text-heading-s {
+    font-family: var(--font-sans);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.45;
+  }
+
+  /* Body L */
+  .text-body-l {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  /* Body M */
+  .text-body-m {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  /* Body S */
+  .text-body-s {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.45;
+  }
+
+  /* Tiny */
+  .text-tiny {
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 1.35;
+  }
+
+  /* Button */
+  .text-button {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+
+  /* Caption */
+  .text-caption {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  /* Link */
+  .text-link {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  /* ── Tablet overrides (>= 800px) ── */
+  @media (min-width: 800px) {
+    .text-display {
+      font-size: 72px;
+    }
+    .text-heading-l {
+      font-size: 56px;
+    }
+    .text-heading-m {
+      font-size: 40px;
+    }
+    .text-heading-s {
+      font-size: 24px;
+    }
+    .text-body-l {
+      font-size: 18px;
+    }
+    .text-body-m {
+      font-size: 16px;
+    }
+    .text-body-s {
+      font-size: 14px;
+    }
+    .text-tiny {
+      font-size: 12px;
+    }
+    .text-button {
+      font-size: 18px;
+    }
+    .text-caption {
+      font-size: 18px;
+    }
+    .text-link {
+      font-size: 18px;
+    }
+  }
+
+  /* ── Desktop overrides (>= 1280px) ── */
+  @media (min-width: 1280px) {
+    .text-display {
+      font-size: 96px;
+    }
+    .text-heading-l {
+      font-size: 72px;
+    }
+    .text-heading-m {
+      font-size: 48px;
+    }
+    .text-heading-s {
+      font-size: 32px;
+    }
+    .text-body-l {
+      font-size: 18px;
+    }
+    .text-body-m {
+      font-size: 16px;
+    }
+    .text-body-s {
+      font-size: 14px;
+    }
+    .text-tiny {
+      font-size: 12px;
+    }
+    .text-button {
+      font-size: 18px;
+    }
+    .text-caption {
+      font-size: 18px;
+    }
+    .text-link {
+      font-size: 18px;
+    }
+  }
+}
