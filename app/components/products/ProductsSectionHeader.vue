@@ -13,13 +13,13 @@ import { Search, ChevronDown } from "lucide-vue-next"
       <div class="flex items-center gap-inner">
         <UiButton
           variant="ghost"
-          class="text-text-00 hover:bg-white/10"
+          class="text-text-00 hover:bg-white/10 !px-3 !py-3"
           aria-label="Search"
         >
           <Search class="size-6" />
         </UiButton>
 
-        <UiButton variant="grey" class="w-[173px] rounded-lg font-normal">
+        <UiButton variant="grey" class="w-[173px] rounded-lg font-normal !px-6 !py-2">
           <img src="/icons/filter.svg" alt="Filter" class="size-6">
           Filter
         </UiButton>
@@ -27,7 +27,7 @@ import { Search, ChevronDown } from "lucide-vue-next"
 
       <div class="flex items-center gap-tiny">
         <span class="text-body-l text-text-00">Sort:</span>
-        <UiButton variant="grey" class="w-[197px] justify-between rounded-lg font-normal">
+        <UiButton variant="grey" class="w-[197px] justify-between rounded-lg font-normal !px-8 !py-2">
           Trending
           <ChevronDown class="size-6" />
         </UiButton>

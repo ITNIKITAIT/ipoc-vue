@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Share2, TriangleAlert } from "lucide-vue-next"
+import { Share, TriangleAlert } from "lucide-vue-next"
 
 withDefaults(defineProps<{
   badge?: { label: string; color: string; icon?: string }
@@ -63,7 +63,7 @@ withDefaults(defineProps<{
             <img src="/icons/X.svg" alt="X" width="24" height="24">
           </button>
           <button class="border border-[#d9d8d8] rounded-full p-3 flex items-center justify-center">
-            <Share2 :size="24" class="text-white" />
+            <Share :size="24" class="text-white" />
           </button>
         </div>
       </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Rocket, ShoppingCart, AlertTriangle } from "lucide-vue-next"
+import { AlertTriangle } from "lucide-vue-next"
 import type { ProjectStatus } from "~/types/products"
 
 defineProps<{
@@ -9,17 +9,17 @@ defineProps<{
 const statusConfig = {
   fundraising: {
     label: "Fundraising",
-    icon: Rocket,
+    iconSrc: "/icons/rocket.svg",
     bg: "bg-status-fundraising-badge",
   },
   "live-trading": {
     label: "Live Trading",
-    icon: ShoppingCart,
+    iconSrc: "/icons/lin-cart.svg",
     bg: "bg-status-trading-badge",
   },
   failed: {
     label: "Failed",
-    icon: AlertTriangle,
+    iconSrc: null,
     bg: "bg-status-failed",
   },
 } as const
@@ -32,7 +32,8 @@ const statusConfig = {
       statusConfig[status].bg,
     )"
   >
-    <component :is="statusConfig[status].icon" class="size-4" />
+    <UiSvgIcon v-if="statusConfig[status].iconSrc" :src="statusConfig[status].iconSrc!" class="size-4" />
+    <AlertTriangle v-else class="size-4" />
     {{ statusConfig[status].label }}
   </div>
 </template>

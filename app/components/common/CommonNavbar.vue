@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { Sun } from "lucide-vue-next"
+import { Moon, Sun } from "lucide-vue-next"
 
 const isConnected = ref(false)
 const route = useRoute()
+const { isDark, toggle: toggleColorMode, initialize: initializeColorMode } = useColorMode()
+
+onMounted(initializeColorMode)
 
 const navLinks = [
-  { label: "Marketplace", href: "/products" },
+  { label: "Marketplace", href: "/marketplace" },
   { label: "Create Project", href: "/create-project" },
   { label: "Learning Hub", href: "#" },
 ]
@@ -25,23 +28,39 @@ const activeRole = computed(() => {
 <template>
   <nav class="flex w-full items-center justify-between bg-black px-12 py-4">
     <UiContainer class="flex-row items-center justify-between">
-      <NuxtLink to="/products" class="relative flex items-center shrink-0 text-heading-s text-white">
+      <NuxtLink to="/marketplace" class="relative flex items-center shrink-0 text-heading-s text-white">
         <img src="/ipoc-logo.svg" alt="IPOC" class="object-contain">
       </NuxtLink>
 
       <div class="flex items-center gap-small">
-        <NuxtLink
-          v-for="link in navLinks"
-          :key="link.href"
-          :to="link.href"
-          class="px-4 py-3 text-lg font-semibold uppercase text-white transition-colors hover:text-brand-primary-20"
-        >
-          {{ link.label }}
-        </NuxtLink>
+        <template v-for="link in navLinks" :key="link.href">
+          <span
+            v-if="link.href === '#'"
+            class="px-4 py-3 text-lg font-semibold uppercase text-white opacity-60 cursor-not-allowed"
+            :title="`${link.label} — coming soon`"
+          >
+            {{ link.label }}
+          </span>
+          <NuxtLink
+            v-else
+            :to="link.href"
+            class="px-4 py-3 text-lg font-semibold uppercase text-white transition-colors hover:text-brand-primary-20"
+          >
+            {{ link.label }}
+          </NuxtLink>
+        </template>
       </div>
 
       <div class="flex items-center gap-4">
-        <Sun class="size-6 text-white cursor-pointer" />
+        <button
+          type="button"
+          :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+          :aria-pressed="isDark"
+          class="flex items-center justify-center rounded-full p-1 text-white transition-colors hover:text-brand-primary-20"
+          @click="toggleColorMode"
+        >
+          <component :is="isDark ? Sun : Moon" class="size-6" />
+        </button>
 
         <template v-if="isConnected">
           <div class="flex items-center gap-4">

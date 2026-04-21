@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ShoppingCart, Rocket, AlertTriangle } from "lucide-vue-next"
+import { AlertTriangle } from "lucide-vue-next"
+import type { Component } from "vue"
 
 defineProps<{
   activeTab: string
@@ -9,12 +10,14 @@ const emit = defineEmits<{
   "update:activeTab": [value: string]
 }>()
 
-const tabs = [
-  { key: "all", label: "All", icon: null },
-  { key: "post-raise", label: "Post-raise", icon: ShoppingCart },
-  { key: "fundraising", label: "Fundraising", icon: Rocket },
-  { key: "failed", label: "Failed", icon: AlertTriangle },
-] as const
+type Tab = { key: string; label: string; iconSrc?: string; iconComponent?: Component }
+
+const tabs: Tab[] = [
+  { key: "all", label: "All" },
+  { key: "post-raise", label: "Post-raise", iconSrc: "/icons/lin-cart.svg" },
+  { key: "fundraising", label: "Fundraising", iconSrc: "/icons/rocket.svg" },
+  { key: "failed", label: "Failed", iconComponent: AlertTriangle },
+]
 </script>
 
 <template>
@@ -30,7 +33,8 @@ const tabs = [
       )"
       @click="emit('update:activeTab', tab.key)"
     >
-      <component :is="tab.icon" v-if="tab.icon" class="size-6" />
+      <UiSvgIcon v-if="tab.iconSrc" :src="tab.iconSrc" class="size-6" />
+      <component :is="tab.iconComponent" v-else-if="tab.iconComponent" class="size-6" />
       {{ tab.label }}
     </button>
   </div>

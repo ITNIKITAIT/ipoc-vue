@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MessageCircle, Heart, Clock, HelpCircle, AlertTriangle, Info, Shield, User } from "lucide-vue-next"
+import { MessageCircle, Heart, Clock, HelpCircle, AlertTriangle, Info, User } from "lucide-vue-next"
 
 const comments = [
   { avatar: null, name: "8xSk...Lnw3x", tokens: "10.91M SYB", isVerified: false, tag: "Questions", time: "5m ago", text: "Has the team confirmed the final delivery date for the Mainnet launch? The milestone deadline is approaching and I don\u2019t see the proof uploaded yet.", replies: 2, likes: 1 },
@@ -46,7 +46,7 @@ const tagIcons: Record<string, any> = { Questions: HelpCircle, Risk: AlertTriang
         <div class="flex gap-4 items-center">
           <span class="text-sm text-white leading-[1.5]">{{ c.name }}</span>
           <div v-if="c.isVerified" class="flex items-center gap-2 py-1">
-            <Shield :size="16" class="text-[#2bced4]" />
+            <UiSvgIcon src="/icons/shield.svg" class="size-4 text-[#2bced4]" />
             <span class="text-sm text-[#2bced4] leading-[1.5]">Verified</span>
           </div>
           <span class="text-sm text-white leading-[1.5]">{{ c.tokens }}</span>

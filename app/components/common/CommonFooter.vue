@@ -1,16 +1,14 @@
 <script setup lang="ts">
-import { Globe, Share2 } from "lucide-vue-next"
-
 const socialLinks = [
-  { icon: Globe, label: "Website", href: "#" },
-  { icon: "LinkedInIcon", label: "LinkedIn", href: "#" },
-  { icon: "XIcon", label: "X", href: "#" },
-  { icon: Share2, label: "Share", href: "#" },
+  { iconSrc: "/icons/planet.svg", label: "Website", href: "#" },
+  { label: "LinkedIn", href: "#" },
+  { label: "X", href: "#" },
+  { iconSrc: "/icons/upload.svg", label: "Share", href: "#" },
 ]
 
 const legalLinks = [
-  { label: "terms & conditions", href: "#" },
-  { label: "privacy policy", href: "#" },
+  { label: "terms & conditions", href: "/terms" },
+  { label: "privacy policy", href: "/privacy" },
 ]
 </script>
 
@@ -38,8 +36,8 @@ const legalLinks = [
             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
           </svg>
         </template>
-        <template v-else>
-          <component :is="link.icon" class="size-5" />
+        <template v-else-if="link.iconSrc">
+          <UiSvgIcon :src="link.iconSrc" class="size-5" />
         </template>
       </NuxtLink>
     </div>

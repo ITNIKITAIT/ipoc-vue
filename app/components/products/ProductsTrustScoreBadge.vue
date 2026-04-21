@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Shield, XCircle } from "lucide-vue-next"
+import { XCircle } from "lucide-vue-next"
 import type { ProjectStatus } from "~/types/products"
 
 defineProps<{
@@ -20,7 +20,7 @@ defineProps<{
     )"
   >
     <XCircle v-if="status === 'failed'" class="size-4" />
-    <Shield v-else class="size-4" />
+    <UiSvgIcon v-else src="/icons/shield.svg" class="size-4" />
     {{ score }}
   </div>
 </template>

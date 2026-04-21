@@ -189,6 +189,7 @@
   --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, monospace;
   --font-heading: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+  --font-roboto: 'Roboto', ui-sans-serif, system-ui, sans-serif;
 
   /* shadcn semantic color aliases → Tailwind utilities */
   --color-background: var(--background);

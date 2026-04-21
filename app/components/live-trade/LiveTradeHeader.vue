@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Share2 } from "lucide-vue-next"
+import { Share } from "lucide-vue-next"
 </script>
 
 <template>
@@ -25,7 +25,7 @@ import { Share2 } from "lucide-vue-next"
             <img src="/icons/X.svg" alt="X" width="24" height="24">
           </button>
           <button class="border border-white rounded-full p-3 flex items-center justify-center">
-            <Share2 :size="24" class="text-white" />
+            <Share :size="24" class="text-white" />
           </button>
         </div>
       </div>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-await navigateTo("/products", { redirectCode: 301 })
+await navigateTo("/marketplace", { redirectCode: 301 })
 </script>
 
 <template>

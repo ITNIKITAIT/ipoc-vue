@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { resolveComponent } from "vue"
 import { cva, type VariantProps } from "class-variance-authority"
 
 const buttonVariants = cva(
@@ -48,11 +49,18 @@ const props = withDefaults(
     as: "button",
   },
 )
+
+const HTML_TAG = /^[a-z]/
+const resolvedAs = computed(() => {
+  if (typeof props.as !== "string") return props.as
+  if (HTML_TAG.test(props.as)) return props.as
+  return resolveComponent(props.as)
+})
 </script>
 
 <template>
   <component
-    :is="props.as"
+    :is="resolvedAs"
     :data-slot="'button'"
     :data-variant="props.variant"
     :data-size="props.size"

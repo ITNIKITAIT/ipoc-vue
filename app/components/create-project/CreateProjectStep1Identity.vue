@@ -130,9 +130,7 @@ const onSubmit = handleSubmit((data) => {
                 type="button"
                 class="absolute right-2 flex gap-1 items-center px-4 py-1 bg-[#333] rounded-2xl text-sm text-white hover:bg-[#444] transition-colors"
               >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2L9.19 8.63L2 9.24L7 13.97L5.82 21L12 17.27L18.18 21L17 13.97L22 9.24L14.81 8.63L12 2Z" />
-                </svg>
+                <UiSvgIcon src="/icons/stars.svg" class="size-4 text-white" />
                 Suggest
               </button>
             </div>
@@ -154,7 +152,7 @@ const onSubmit = handleSubmit((data) => {
               @click="projectImageInput?.click()"
             >
               <img v-if="projectImagePreview" :src="projectImagePreview" alt="preview" class="size-full object-cover rounded-lg">
-              <Upload v-else class="text-[#d9d8d8]" :size="32" />
+              <UiSvgIcon v-else src="/icons/img.svg" class="size-8 text-[#d9d8d8]" />
             </button>
             <div class="flex flex-col gap-2">
               <button
@@ -316,7 +314,7 @@ const onSubmit = handleSubmit((data) => {
                   @click="($refs[`teamImageInput${index}`] as HTMLInputElement)?.click()"
                 >
                   <img v-if="teamMemberImagePreview(index)" :src="teamMemberImagePreview(index)" alt="preview" class="size-full object-cover rounded-lg">
-                  <Upload v-else class="text-[#d9d8d8]" :size="32" />
+                  <UiSvgIcon v-else src="/icons/img.svg" class="size-8 text-[#d9d8d8]" />
                 </button>
                 <div class="flex flex-col gap-2">
                   <button

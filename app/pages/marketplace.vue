@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { ProjectData } from "~/types/products"
+import type { ProjectData } from "~/types/products";
 
-useHead({ title: "Products - IPOC" })
+useHead({ title: "Marketplace - IPOC" });
 
 const fundraisingProject: ProjectData = {
   type: "fundraising",
@@ -15,7 +15,7 @@ const fundraisingProject: ProjectData = {
     { label: "Days left", value: "12 days" },
     { label: "Investors", value: "142" },
   ],
-}
+};
 
 const liveTradingProject: ProjectData = {
   type: "live-trading",
@@ -29,7 +29,7 @@ const liveTradingProject: ProjectData = {
     { label: "Market cap", value: "$860,000" },
     { label: "24h change", value: "+2.4% \u25B2", highlight: true },
   ],
-}
+};
 
 const failedProject: ProjectData = {
   type: "failed",
@@ -38,7 +38,7 @@ const failedProject: ProjectData = {
     { label: "Amount raised vs target", value: "$15,500 of $50,000" },
     { label: "Ended", value: "14 days" },
   ],
-}
+};
 
 const projects = [
   {
@@ -101,22 +101,22 @@ const projects = [
     category: "DeFi",
     data: failedProject,
   },
-]
+];
 </script>
 
 <template>
   <div
     class="flex min-h-screen flex-col gap-10 pt-12"
     :style="{
-      backgroundImage: 'linear-gradient(67deg, rgb(0, 33, 71) 21%, rgb(0, 0, 0) 100%)',
-    }"
-  >
+      backgroundImage:
+        'linear-gradient(67deg, rgb(0, 33, 71) 21%, rgb(0, 0, 0) 100%)',
+    }">
     <UiContainer>
       <ProductsHeroBanner />
       <ProductsCategoryTags />
       <ProductsSectionHeader />
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-start gap-6">
         <ProductsCard
           v-for="(project, i) in projects"
           :key="i"
@@ -127,8 +127,7 @@ const projects = [
           :status="project.status"
           :trust-score="project.trustScore"
           :category="project.category"
-          :data="project.data"
-        />
+          :data="project.data" />
       </div>
 
       <ProductsPagination :current-page="1" :total-pages="10" />
