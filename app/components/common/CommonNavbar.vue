@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { Moon, Sun } from "lucide-vue-next"
+// import { Moon, Sun } from "lucide-vue-next"
 
 const isConnected = ref(false)
 const route = useRoute()
-const { isDark, toggle: toggleColorMode, initialize: initializeColorMode } = useColorMode()
+// const { isDark, toggle: toggleColorMode, initialize: initializeColorMode } = useColorMode()
 
-onMounted(initializeColorMode)
+// onMounted(initializeColorMode)
 
 const navLinks = [
   { label: "Marketplace", href: "/marketplace" },
@@ -52,7 +52,7 @@ const activeRole = computed(() => {
       </div>
 
       <div class="flex items-center gap-4">
-        <button
+        <!-- <button
           type="button"
           :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
           :aria-pressed="isDark"
@@ -60,7 +60,8 @@ const activeRole = computed(() => {
           @click="toggleColorMode"
         >
           <component :is="isDark ? Sun : Moon" class="size-6" />
-        </button>
+        </button> -->
+
 
         <template v-if="isConnected">
           <div class="flex items-center gap-4">
@@ -104,7 +105,7 @@ const activeRole = computed(() => {
             class="uppercase font-semibold rounded-full"
             @click="isConnected = true"
           >
-            <UiSvgIcon src="/icons/wallet.svg" class="size-5 text-black" />
+            <UiSvgIcon src="/icons/wallet.svg" class="size-5" />
             Connect Wallet
           </UiButton>
         </template>

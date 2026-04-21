@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { resolveComponent } from "vue"
+import { NuxtLink } from "#components"
 import { cva, type VariantProps } from "class-variance-authority"
 
 const buttonVariants = cva(
@@ -18,7 +19,7 @@ const buttonVariants = cva(
         white: "bg-white text-dark-blue hover:bg-white/80",
         grey: "text-text-00 [background-image:linear-gradient(90deg,rgba(0,0,0,0.2)_0%,rgba(0,0,0,0.2)_100%),linear-gradient(90deg,rgba(242,242,242,0.36)_0%,rgba(242,242,242,0.36)_100%)] shadow-[inset_0px_4px_8px_0px_rgba(0,0,0,0.25)]",
         glass:
-          "border-white/30 text-text-00 [background-image:linear-gradient(179deg,rgba(208,217,226,0.063),rgba(255,255,255,0.02))] shadow-[inset_0px_4px_8px_0px_rgba(0,0,0,0.25)] hover:bg-white/10",
+          "border-white/30 text-text-00 [background-image:linear-gradient(179deg,rgba(208,217,226,0.12),rgba(255,255,255,0.12))] shadow-[inset_0px_4px_8px_0px_rgba(0,0,0,0.25)] hover:bg-white/10",
       },
       size: {
         default: "px-6 py-3 text-base",
@@ -54,6 +55,7 @@ const HTML_TAG = /^[a-z]/
 const resolvedAs = computed(() => {
   if (typeof props.as !== "string") return props.as
   if (HTML_TAG.test(props.as)) return props.as
+  if (props.as === "NuxtLink") return NuxtLink
   return resolveComponent(props.as)
 })
 </script>

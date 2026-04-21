@@ -356,7 +356,7 @@ function formatDate(dateStr: string) {
           type="button"
           class="flex items-center gap-2 border border-[#156bb7] rounded-full px-6 py-3 text-white text-lg font-semibold uppercase"
           @click="emit('saveDraft')">
-          <UiSvgIcon src="/icons/save.svg" class="size-5" />
+          <UiSvgIcon src="/icons/save.svg" class="size-6" />
           Save Draft
         </button>
         <button

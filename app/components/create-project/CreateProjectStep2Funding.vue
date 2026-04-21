@@ -451,8 +451,8 @@ const onSubmit = handleSubmit((data) => {
                 rgba(255, 255, 255, 0.1) 96.1%
               );
             " />
-          <UiSvgIcon src="/icons/save.svg" class="size-6" />
-          Save
+          <UiSvgIcon src="/icons/save.svg" class="size-6 relative" />
+          <span class="relative">Save</span>
         </button>
         <button
           type="submit"

@@ -6,6 +6,8 @@ export default defineNuxtConfig({
   css: ["~/assets/css/main.css"],
   app: {
     head: {
+      title: "IPOC",
+      titleTemplate: "IPOC",
       link: [
         { rel: "icon", type: "image/svg+xml", href: "/ipoc-logo.svg" },
         {

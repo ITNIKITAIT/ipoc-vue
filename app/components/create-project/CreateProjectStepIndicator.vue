@@ -16,7 +16,7 @@ const steps = [
     <div v-for="{ number, label } in steps" :key="number" class="flex gap-2 items-center">
       <div
         :class="[
-          'flex items-center justify-center rounded-full size-6 shrink-0 text-sm font-semibold',
+          'flex items-center justify-center rounded-full size-6 shrink-0 text-sm font-semibold leading-none',
           number < currentStep || number === currentStep
             ? 'bg-white text-[#002147]'
             : 'border border-white text-white',
@@ -29,6 +29,7 @@ const steps = [
           viewBox="0 0 14 14"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          class="block"
         >
           <path
             d="M2 7L5.5 10.5L12 3.5"
@@ -38,7 +39,7 @@ const steps = [
             stroke-linejoin="round"
           />
         </svg>
-        <template v-else>{{ number }}</template>
+        <span v-else class="block leading-none">{{ number }}</span>
       </div>
       <span class="text-sm text-white">{{ label }}</span>
     </div>

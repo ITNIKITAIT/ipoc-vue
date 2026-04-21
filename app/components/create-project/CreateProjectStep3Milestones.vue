@@ -5,14 +5,10 @@ import {
   ArrowLeft,
   ArrowRight,
   Calendar,
-  FileText,
-  Image as ImageIcon,
   Lock,
   Plus,
-  XCircle,
-  Pencil,
-  Presentation,
   Upload,
+  XCircle,
 } from "lucide-vue-next";
 import {
   step3Schema,
@@ -66,6 +62,26 @@ const draft = ref<ManualDraft>({
 });
 const draftFiles = ref<{ name: string; type: string }[]>([]);
 const fileInputRef = useTemplateRef<HTMLInputElement>("fileInputRef");
+const draftDeadlineInput =
+  useTemplateRef<HTMLInputElement>("draftDeadlineInput");
+
+function openDraftDeadlinePicker() {
+  const el = draftDeadlineInput.value;
+  if (!el) return;
+  if (typeof el.showPicker === "function") el.showPicker();
+  else el.focus();
+}
+
+function formatDraftDeadlineDisplay(iso: string): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
 
 const { handleSubmit, values, setFieldValue } = useForm<Step3FormValues>({
   validationSchema: toTypedSchema(step3Schema),
@@ -160,8 +176,17 @@ function handleAddMilestone() {
   draftFiles.value = [];
 }
 
+const ALLOWED_DOC_EXTENSIONS = ["pdf", "ppt", "pptx", "doc", "docx"] as const;
+
+function isAllowedDoc(file: File): boolean {
+  const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+  return (ALLOWED_DOC_EXTENSIONS as readonly string[]).includes(ext);
+}
+
 function handleFileChange(e: Event) {
-  const files = Array.from((e.target as HTMLInputElement).files ?? []);
+  const files = Array.from((e.target as HTMLInputElement).files ?? []).filter(
+    isAllowedDoc,
+  );
   draftFiles.value.push(...files.map((f) => ({ name: f.name, type: f.type })));
   if (fileInputRef.value) fileInputRef.value.value = "";
 }
@@ -229,16 +254,16 @@ const onSubmit = handleSubmit((data) => {
         🔓 How milestone funding works
       </p>
       <div class="flex gap-4 items-start text-base font-medium text-white">
-        <span class="w-[193px] shrink-0">Milestone 1 —</span>
+        <span class="w-[193px] shrink-0">Milestone 1</span>
         <span class="flex-1"
-          >Released automatically when your fundraise completes. You receive
+          >— Released automatically when your fundraise completes. You receive
           these funds immediately to start building.</span
         >
       </div>
       <div class="flex gap-4 items-start text-base font-medium text-white">
-        <span class="w-[193px] shrink-0">Milestones 2 onwards —</span>
+        <span class="w-[193px] shrink-0">Milestones 2 onwards</span>
         <span class="flex-1"
-          >Submit proof when complete. Your investors vote. If approved, the
+          >— Submit proof when complete. Your investors vote. If approved, the
           next tranche is released.</span
         >
       </div>
@@ -262,9 +287,7 @@ const onSubmit = handleSubmit((data) => {
             alt="Automatic"
             width="98"
             height="98"
-            :class="
-              selectedMode === 'manual' ? 'opacity-20 grayscale' : 'opacity-100'
-            " />
+            :class="selectedMode === 'manual' ? 'opacity-40' : 'opacity-100'" />
           <div class="text-center">
             <p
               class="text-[18px] font-semibold uppercase tracking-[0.5px]"
@@ -291,9 +314,7 @@ const onSubmit = handleSubmit((data) => {
             width="98"
             height="98"
             :class="
-              selectedMode === 'automatic'
-                ? 'opacity-20 grayscale'
-                : 'opacity-100'
+              selectedMode === 'automatic' ? 'opacity-40' : 'opacity-100'
             " />
           <div class="text-center">
             <p
@@ -351,10 +372,20 @@ const onSubmit = handleSubmit((data) => {
 
         <button
           type="button"
-          class="relative flex items-center gap-2 rounded-full border border-[#156bb7] bg-white px-12 py-3 text-[18px] font-semibold uppercase text-black overflow-hidden shadow-[inset_0px_4px_8px_0px_rgba(0,0,0,0.25)] transition-opacity hover:opacity-80 shrink-0 ml-6"
+          class="relative flex items-center justify-center gap-2 rounded-full border border-[#156bb7] px-12 py-3 text-[18px] font-semibold uppercase text-white overflow-hidden shadow-[inset_0px_4px_8px_0px_rgba(0,0,0,0.25)] transition-opacity hover:opacity-80 shrink-0 ml-6"
           @click="handleSetupMilestones">
-          Set up milestones
-          <ArrowRight :size="24" />
+          <span
+            aria-hidden="true"
+            class="absolute inset-0 pointer-events-none rounded-[inherit]"
+            style="
+              background: linear-gradient(
+                178.13deg,
+                rgba(208, 217, 226, 0.1) 0.467%,
+                rgba(255, 255, 255, 0.1) 96.1%
+              );
+            " />
+          <span class="relative">Set up milestones</span>
+          <ArrowRight :size="24" class="relative" />
         </button>
       </div>
     </template>
@@ -363,8 +394,8 @@ const onSubmit = handleSubmit((data) => {
     <template v-if="workingMode === 'automatic'">
       <div
         class="rounded-[8px] border p-6"
-        style="background: rgba(0, 128, 0, 0.24); border-color: #008000">
-        <p class="text-base font-medium text-[#00e600]">
+        style="background: rgba(0, 70, 0, 0.65); border-color: #008000">
+        <p class="text-base font-medium text-white">
           {{ MILESTONE_AUTO_COUNT }} milestones auto-created with equal amounts
           ({{ pctLabel }} each) and deadlines spaced across your timeline. Names
           and descriptions are yours to fill in. You can adjust any values
@@ -399,8 +430,8 @@ const onSubmit = handleSubmit((data) => {
                     rgba(255, 255, 255, 0.1) 96.1%
                   );
                 " />
-              <Pencil :size="24" />
-              Edit Milestones
+              <UiSvgIcon src="/icons/pen.svg" class="size-6 relative" />
+              <span class="relative">Edit Milestones</span>
             </button>
           </div>
           <div class="flex items-start justify-between">
@@ -515,15 +546,27 @@ const onSubmit = handleSubmit((data) => {
             >Deadline (required)</label
           >
           <div class="flex flex-col gap-2">
-            <div class="relative flex items-center">
-              <Calendar
-                :size="20"
-                class="absolute left-5 text-[#d9d8d8] pointer-events-none" />
-              <UiInput
+            <button
+              type="button"
+              class="relative flex w-full items-center gap-3 rounded-full border border-[#333] bg-[#1a1a1a] px-4 py-2 text-base text-left shadow-[inset_2px_2px_4px_0px_rgba(0,0,0,0.25)] transition-colors focus-visible:border-[#156bb7] focus-visible:ring-2 focus-visible:ring-[#156bb7]/30 outline-none"
+              @click="openDraftDeadlinePicker">
+              <Calendar :size="20" class="text-[#d9d8d8] shrink-0" />
+              <span
+                :class="
+                  draft.deadline ? 'text-white flex-1' : 'text-[#d9d8d8] flex-1'
+                ">
+                {{
+                  draft.deadline
+                    ? formatDraftDeadlineDisplay(draft.deadline)
+                    : "mm / dd / yyyy"
+                }}
+              </span>
+              <input
+                ref="draftDeadlineInput"
                 v-model="draft.deadline"
-                placeholder="mm / dd / yyyy"
-                class="pl-12" />
-            </div>
+                type="date"
+                class="absolute inset-0 size-full opacity-0 cursor-pointer" />
+            </button>
             <p class="text-[12px] text-[#d9d8d8] text-right leading-[1.5]">
               Set a realistic completion date for this milestone
             </p>
@@ -561,32 +604,23 @@ const onSubmit = handleSubmit((data) => {
 
         <!-- Attachments + Link row -->
         <div class="flex gap-10 items-start">
-          <div class="flex gap-6 items-start shrink-0">
+          <div class="flex gap-4 items-start shrink-0">
             <div class="flex flex-col gap-2">
               <p class="text-base font-medium text-white whitespace-nowrap">
                 Attachments (optional)
               </p>
               <button
                 type="button"
-                class="flex items-center gap-2 px-6 py-2 rounded-full border border-[#156bb7] bg-[#1a1a1a] text-[18px] font-semibold uppercase text-white shadow-[2px_2px_8px_0px_rgba(0,0,0,0.12)] transition-opacity hover:opacity-80 w-[218px]"
+                class="flex items-center justify-center gap-2 px-6 py-2 rounded-full border border-[#156bb7] bg-[#1a1a1a] text-[18px] font-semibold uppercase text-white shadow-[2px_2px_8px_0px_rgba(0,0,0,0.12)] transition-opacity hover:opacity-80 w-[218px]"
                 @click="fileInputRef?.click()">
-                <Upload :size="20" />
-                Upload doc
+                <Upload :size="24" />
+                <span>Upload doc</span>
               </button>
-              <div class="flex items-center gap-3 text-[14px] text-[#666]">
-                <span class="flex items-center gap-1">
-                  <FileText :size="16" class="text-[#e74c3c]" />
-                  PDF
-                </span>
-                <span class="flex items-center gap-1">
-                  <Presentation :size="16" class="text-[#f39c12]" />
-                  PPT
-                </span>
-              </div>
+              <p class="text-[14px] text-[#666]">Pitch deck | Roadmap PDF</p>
               <input
                 ref="fileInputRef"
                 type="file"
-                accept=".pdf,.ppt,.pptx,.png,.jpg,.jpeg"
+                accept=".pdf,.ppt,.pptx,.doc,.docx,application/pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 multiple
                 class="sr-only"
                 @change="handleFileChange" />
@@ -600,33 +634,32 @@ const onSubmit = handleSubmit((data) => {
                 class="flex gap-2 items-center">
                 <div
                   class="relative border border-[#333] rounded-[6px] size-[64px] flex flex-col items-center justify-center gap-1 bg-[#1a1a1a] shrink-0 shadow-[inset_2.9px_2.9px_5.8px_0px_rgba(0,0,0,0.25)]">
-                  <FileText
-                    v-if="file.type.includes('pdf')"
-                    :size="24"
-                    class="text-[#e74c3c]" />
-                  <Presentation
+                  <UiSvgIcon
+                    v-if="
+                      file.type.includes('pdf') ||
+                      file.name.toLowerCase().endsWith('.pdf')
+                    "
+                    src="/icons/pdf.svg"
+                    class="size-[27px]" />
+                  <UiSvgIcon
                     v-else-if="
                       file.type.includes('ppt') ||
-                      file.type.includes('presentation')
+                      file.type.includes('presentation') ||
+                      file.name.toLowerCase().endsWith('.ppt') ||
+                      file.name.toLowerCase().endsWith('.pptx')
                     "
-                    :size="24"
-                    class="text-[#f39c12]" />
-                  <ImageIcon
-                    v-else-if="file.type.startsWith('image/')"
-                    :size="24"
-                    class="text-[#2bced4]" />
-                  <FileText v-else :size="24" class="text-[#d9d8d8]" />
+                    src="/icons/ppt.svg"
+                    class="size-[27px]" />
+                  <UiSvgIcon v-else src="/icons/pdf.svg" class="size-[27px]" />
                   <span class="text-[10px] text-white font-medium">{{
-                    file.type.includes("pdf")
+                    file.type.includes("pdf") ||
+                    file.name.toLowerCase().endsWith(".pdf")
                       ? "PDF"
-                      : file.type.includes("ppt")
+                      : file.type.includes("ppt") ||
+                          file.name.toLowerCase().endsWith(".ppt") ||
+                          file.name.toLowerCase().endsWith(".pptx")
                         ? "PPT"
-                        : file.type.includes("png")
-                          ? "PNG"
-                          : file.type.includes("jpeg") ||
-                              file.type.includes("jpg")
-                            ? "JPG"
-                            : "DOC"
+                        : "DOC"
                   }}</span>
                 </div>
                 <div class="text-[12.6px] text-white leading-[1.5]">
@@ -725,8 +758,8 @@ const onSubmit = handleSubmit((data) => {
                 rgba(255, 255, 255, 0.1) 96.1%
               );
             " />
-          <UiSvgIcon src="/icons/save.svg" class="size-6" />
-          Save
+          <UiSvgIcon src="/icons/save.svg" class="size-6 relative" />
+          <span class="relative">Save</span>
         </button>
         <button
           type="submit"
