@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { AlertTriangle } from "lucide-vue-next"
-
 defineProps<{
   title: string
   description: string
@@ -11,7 +9,7 @@ defineProps<{
 
 <template>
   <div class="flex w-full items-center gap-[22px] rounded-2xl border border-[#ffcc80] bg-[rgba(255,153,0,0.38)] px-6 py-4">
-    <AlertTriangle class="size-10 shrink-0 text-[#ff9900]" />
+    <UiSvgIcon src="/icons/warn.svg" class="size-10 text-[#ff9900]" />
     <div class="flex flex-1 flex-col">
       <p class="text-xl leading-[1.5] text-white">{{ title }}</p>
       <p class="text-base font-medium leading-[1.5] text-white">{{ description }}</p>

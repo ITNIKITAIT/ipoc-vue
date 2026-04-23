@@ -1,7 +1,8 @@
 <template>
   <div class="min-h-screen flex flex-col">
     <CommonNavbar />
-    <div class="min-h-screen bg-[#021a34] relative flex-1">
+    <div
+      class="min-h-screen relative flex-1 bg-gradient-to-b from-[#021a34] via-[#021a34] to-black">
       <div
         class="absolute top-0 left-0 w-full h-[800px] pointer-events-none overflow-hidden">
         <img

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AlertTriangle } from "lucide-vue-next"
+import { AlertTriangle, ChevronRight } from "lucide-vue-next"
 
 type ProjectStatus = "fundraising" | "post-raise" | "failed"
 
@@ -36,11 +36,15 @@ const props = withDefaults(defineProps<{
   quorum: string
   iconBorderColor?: string
   iconColor?: string
+  iconBgColor?: string
+  iconSrc?: string
   warningMessage?: string
   showSubmitProof?: boolean
 }>(), {
   iconBorderColor: "border-[#00e600]",
   iconColor: "text-[#00e600]",
+  iconBgColor: "bg-[#002147]",
+  iconSrc: "/icons/rase.svg",
   showSubmitProof: false,
 })
 
@@ -55,9 +59,9 @@ const statusStyle = computed(() => statusConfig[props.status])
     )"
   >
     <div class="flex gap-[23px] p-6">
-      <div class="flex size-12 shrink-0 flex-col items-center">
-        <div :class="cn('flex w-full items-center rounded-full border-2 bg-[#1a1a1a] p-3', iconBorderColor)">
-          <UiSvgIcon src="/icons/launch.svg" :class="cn('size-6', iconColor)" />
+      <div class="flex size-12 shrink-0 items-center justify-center">
+        <div :class="cn('flex size-full items-center justify-center rounded-full border-2 p-3', iconBgColor, iconBorderColor)">
+          <UiSvgIcon :src="iconSrc" :class="cn('size-6', iconColor)" />
         </div>
       </div>
 
@@ -82,10 +86,15 @@ const statusStyle = computed(() => statusConfig[props.status])
               statusStyle.borderColor ? `border ${statusStyle.borderColor}` : '',
             )"
           >
+            <UiSvgIcon v-if="status === 'fundraising'" src="/icons/launch.svg" class="size-4 shrink-0" />
+            <UiSvgIcon v-else-if="status === 'post-raise'" src="/icons/rase.svg" class="size-4 shrink-0" />
             {{ statusStyle.label }}
           </div>
-          <div v-if="showSubmitProof" class="flex items-center gap-2 rounded-lg bg-[rgba(255,153,0,0.68)] px-4 py-2 text-xs font-bold text-white">
-            <AlertTriangle class="size-4" />
+          <div
+            v-if="showSubmitProof"
+            class="flex items-center gap-2 rounded-lg bg-[#FF9900AD] px-4 py-2 text-xs font-bold text-white"
+          >
+            <UiSvgIcon src="/icons/shield.svg" class="size-4 shrink-0" />
             Action needed
           </div>
         </div>
@@ -93,6 +102,7 @@ const statusStyle = computed(() => statusConfig[props.status])
         <div v-if="warningMessage" class="flex items-center gap-[22px] rounded-2xl border border-[#ffcc80] bg-[rgba(255,153,0,0.38)] px-6 py-4">
           <AlertTriangle class="size-10 shrink-0 text-[#ff9900]" />
           <p class="flex-1 text-xl leading-[1.5] text-white">{{ warningMessage }}</p>
+          <ChevronRight class="size-4 shrink-0 text-white" />
         </div>
 
         <UiProgressBar

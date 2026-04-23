@@ -65,6 +65,8 @@ useHead({ title: "Creator Dashboard - IPOC" })
       released="$0"
       milestones="0/4"
       quorum="TBD"
+      icon-src="/icons/launch.svg"
+      icon-bg-color="bg-[#1a1a1a]"
       icon-border-color="border-[#00e600]"
     />
 
@@ -80,6 +82,8 @@ useHead({ title: "Creator Dashboard - IPOC" })
       released="$0"
       milestones="0/4"
       quorum="TBD"
+      icon-src="/icons/launch.svg"
+      icon-bg-color="bg-[#1a1a1a]"
       icon-border-color="border-[#00e600]"
     />
   </div>

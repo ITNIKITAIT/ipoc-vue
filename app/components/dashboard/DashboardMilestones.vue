@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { Lock, Zap, Vote } from "lucide-vue-next"
 
 type BadgeStatus = "auto-released" | "voting" | "locked" | "complete"
 
@@ -15,29 +14,36 @@ interface Milestone {
   tags?: string[]
 }
 
-defineProps<{
+const props = defineProps<{
   milestones: Milestone[]
 }>()
 
-const badgeConfig: Record<BadgeStatus, { label: string; icon: typeof Zap; bgClass: string }> = {
+const activeTimelineIndex = computed(() => {
+  const firstLockedIndex = props.milestones.findIndex(m => m.status === "locked")
+  if (firstLockedIndex > 0) return firstLockedIndex
+  if (firstLockedIndex === 0) return 0
+  return Math.max(props.milestones.length - 1, 0)
+})
+
+const badgeConfig: Record<BadgeStatus, { label: string; iconSrc: string; bgClass: string }> = {
   "auto-released": {
     label: "Auto-Released",
-    icon: Zap,
+    iconSrc: "/icons/light-solid.svg",
     bgClass: "bg-[rgba(0,197,102,0.3)]",
   },
   voting: {
     label: "Voting",
-    icon: Vote,
+    iconSrc: "/icons/vote.svg",
     bgClass: "bg-[rgba(250,204,21,0.3)]",
   },
   locked: {
     label: "Locked",
-    icon: Lock,
+    iconSrc: "/icons/lock.svg",
     bgClass: "bg-transparent border border-[#156bb7]",
   },
   complete: {
     label: "Complete",
-    icon: Zap,
+    iconSrc: "/icons/light-solid.svg",
     bgClass: "bg-[rgba(0,197,102,0.3)]",
   },
 }
@@ -45,14 +51,26 @@ const badgeConfig: Record<BadgeStatus, { label: string; icon: typeof Zap; bgClas
 
 <template>
   <div class="flex gap-6 rounded-2xl border border-[#333] bg-[#1a1a1a] p-6">
-    <div class="relative w-[41px] shrink-0">
+    <div class="relative w-[56px] shrink-0">
       <div class="absolute bottom-4 left-1/2 top-4 w-[2px] -translate-x-1/2 bg-[#333]" />
       <div
-        v-for="(_, i) in milestones"
+        v-for="(_, i) in props.milestones"
         :key="i"
-        class="absolute left-1/2 size-[18px] -translate-x-1/2 rounded-full border-2 border-brand-secondary-50 bg-[#1a1a1a]"
-        :style="{ top: `calc(${i * (100 / milestones.length) + 5}%)` }"
-      />
+        :class="cn(
+          'absolute left-1/2 flex size-8 -translate-x-1/2 items-center justify-center rounded-full border-[3px]',
+          i <= activeTimelineIndex
+            ? 'border-brand-secondary-50 bg-[#1a1a1a]'
+            : 'border-[#1a7c7f] bg-[#0f0f0f]',
+        )"
+        :style="{ top: `calc(${i * (100 / props.milestones.length) + 5}%)` }"
+      >
+        <span
+          :class="cn(
+            'size-3 rounded-full',
+            i <= activeTimelineIndex ? 'bg-brand-secondary-50' : 'bg-[#111]',
+          )"
+        />
+      </div>
     </div>
 
     <div class="flex flex-1 flex-col gap-6">
@@ -65,19 +83,19 @@ const badgeConfig: Record<BadgeStatus, { label: string; icon: typeof Zap; bgClas
           m.status === 'auto-released' && 'border border-[#1a7c7f]',
         )"
       >
-        <div class="absolute right-6 top-6 flex flex-col items-center gap-1">
-          <span class="text-center text-xs text-white">{{ badgeConfig[m.status].label }}</span>
+        <div class="absolute right-6 top-6 flex w-[88px] flex-col items-center gap-2">
+          <span class="text-center text-xs font-medium leading-[1.25] text-white">{{ badgeConfig[m.status].label }}</span>
           <div
             :class="cn(
-              'flex items-center justify-center rounded-full p-3 backdrop-blur-sm',
+              'flex size-12 items-center justify-center rounded-full p-3 backdrop-blur-sm',
               badgeConfig[m.status].bgClass,
             )"
           >
-            <component :is="badgeConfig[m.status].icon" class="size-6 text-white" />
+            <UiSvgIcon :src="badgeConfig[m.status].iconSrc" class="size-5 text-white" />
           </div>
         </div>
 
-        <div class="flex flex-col gap-2 pr-20">
+        <div class="flex flex-col gap-2 pr-[116px]">
           <h3 class="text-xl font-semibold leading-[1.5] text-white">{{ m.title }}</h3>
           <p class="text-base font-medium leading-[1.5] text-white">{{ m.description }}</p>
           <div class="flex items-center gap-[34px] text-base font-medium leading-[1.5] text-white">

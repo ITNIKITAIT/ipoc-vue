@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { AlertTriangle } from "lucide-vue-next"
-
 type ProjectStatus = "fundraising" | "post-raise" | "failed"
 
 const props = defineProps<{
@@ -49,8 +47,8 @@ const percentageColor = computed(() => props.status === "failed" ? "text-[#e6000
     )"
   >
     <div class="flex gap-[23px] p-6">
-      <div class="flex size-12 shrink-0 flex-col items-center">
-        <div class="flex w-full items-center rounded-full border-2 border-[#333] bg-[#1a1a1a] p-3">
+      <div class="flex size-12 shrink-0 items-center justify-center">
+        <div class="flex size-full items-center justify-center rounded-full border-2 border-[#333] bg-[#1a1a1a] p-3">
           <UiSvgIcon src="/icons/investor.svg" class="size-6 text-white" />
         </div>
       </div>
@@ -77,15 +75,18 @@ const percentageColor = computed(() => props.status === "failed" ? "text-[#e6000
           <div
             :class="cn(
               'flex w-[123px] items-center gap-2 rounded-lg px-3 py-2 text-xs font-bold',
+              status === 'failed' && 'justify-center',
               statusStyle.bg,
               statusStyle.textColor,
               statusStyle.border || '',
             )"
           >
+            <UiSvgIcon v-if="status === 'post-raise'" src="/icons/rase.svg" class="size-4 shrink-0" />
+            <UiSvgIcon v-else-if="status === 'failed'" src="/icons/warn.svg" class="size-4 shrink-0" />
             {{ statusStyle.label }}
           </div>
-          <div v-if="actionNeeded" class="flex items-center gap-2 rounded-lg border border-[#ffcc80] bg-[#ff9900] px-4 py-2 text-xs font-bold text-[#002147]">
-            <AlertTriangle class="size-4" />
+          <div v-if="actionNeeded" class="flex items-center gap-2 rounded-lg border border-[#ffcc80] bg-[#ff9900] px-4 py-2 text-xs font-bold text-white">
+            <UiSvgIcon src="/icons/shield.svg" class="size-4 shrink-0" />
             Action needed
           </div>
         </div>
@@ -124,7 +125,7 @@ const percentageColor = computed(() => props.status === "failed" ? "text-[#e6000
           <NuxtLink
             :to="`/dashboard/projects/${id}`"
             :class="cn(
-              'rounded-full px-8 py-2 text-lg font-semibold uppercase hover:bg-white/5',
+              'rounded-full px-8 text-lg font-semibold uppercase hover:bg-white/5 flex items-center gap-2 justify-center',
               actionNeeded
                 ? 'border border-[#156bb7] text-white'
                 : 'bg-[rgba(255,153,0,0.68)] text-[#002147] hover:bg-[rgba(255,153,0,0.85)]',

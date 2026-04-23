@@ -1,4 +1,31 @@
 <script setup lang="ts">
+const stats = [
+  {
+    title: "Total raised",
+    value: "$1,000,000",
+    subtitle: "of $1,000,000 goal",
+    valueColor: "text-brand-secondary-50",
+  },
+  {
+    title: "Tokens sold",
+    value: "650,000,000",
+    subtitle: "of 1,000,000,000 total",
+    valueColor: "text-white",
+  },
+  {
+    title: "Released to date",
+    value: "$150,000",
+    subtitle: "Across all milestones",
+    valueColor: "text-white",
+  },
+  {
+    title: "Milestones",
+    value: "1/4",
+    subtitle: "1 completed · 3 remaining",
+    valueColor: "text-white",
+  },
+]
+
 const milestones = [
   {
     title: "Milestone 1 \u2014 MVP Development",
@@ -31,11 +58,16 @@ const milestones = [
 
 <template>
   <div class="flex flex-col gap-6">
-    <div class="flex gap-6">
-      <DashboardStatCard title="Total raised" value="$1,000,000" subtitle="of $1,000,000 goal" value-color="text-brand-secondary-50" />
-      <DashboardStatCard title="Tokens sold" value="650,000,000" subtitle="of 1,000,000,000 total" />
-      <DashboardStatCard title="Released to date" value="$150,000" subtitle="Across all milestones" />
-      <DashboardStatCard title="Milestones" value="1/4" subtitle="1 completed · 3 remaining" />
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+      <div
+        v-for="stat in stats"
+        :key="stat.title"
+        class="flex min-h-[168px] flex-col rounded-3xl bg-[#1a1a1a] px-6 py-7"
+      >
+        <p class="text-body-l font-medium text-white">{{ stat.title }}</p>
+        <p :class="cn('mt-3 text-heading-s leading-[1.25] tracking-tight', stat.valueColor)">{{ stat.value }}</p>
+        <p class="mt-3 text-body-m text-[#666]">{{ stat.subtitle }}</p>
+      </div>
     </div>
 
     <DashboardWarningBanner

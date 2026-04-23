@@ -66,7 +66,7 @@ const statusStyle = computed(() => statusConfig[props.status])
         <div v-if="status === 'fundraising' && percentage !== undefined" class="flex flex-col gap-2">
           <div class="flex items-end justify-between text-base leading-[1.5]">
             <p class="font-bold text-brand-secondary-50">{{ percentage }}% raised</p>
-            <p class="font-medium text-[#666]">{{ raisedLabel }}</p>
+            <p class="font-medium text-white">{{ raisedLabel }}</p>
           </div>
           <div class="relative h-4 w-full rounded-full bg-[#333]">
             <div

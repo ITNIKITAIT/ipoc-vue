@@ -1,11 +1,5 @@
 <script setup lang="ts">
-import {
-  Coins,
-  FileText,
-  Image as ImageIcon,
-  Lock,
-  Pencil,
-} from "lucide-vue-next";
+import { FileText, Image as ImageIcon } from "lucide-vue-next";
 import type {
   Step1FormValues,
   Step2FormValues,
@@ -63,7 +57,10 @@ function formatDate(dateStr: string) {
       class="bg-[rgba(255,153,0,0.38)] rounded-2xl px-12 py-6 flex flex-col gap-6">
       <p
         class="flex items-center gap-2 text-white text-lg font-semibold uppercase tracking-wide">
-        <Lock :size="18" class="text-white shrink-0" />
+        <UiSvgIcon
+          src="/icons/alert.svg"
+          alt="Warning"
+          class="size-6 shrink-0 text-[#ff9900]" />
         Once you publish, nothing can be changed
       </p>
       <p class="text-white text-base font-medium">
@@ -348,7 +345,7 @@ function formatDate(dateStr: string) {
         type="button"
         class="flex items-center gap-2 border border-[#156bb7] rounded-full px-6 py-3 text-white text-lg font-semibold uppercase"
         @click="emit('edit')">
-        <Pencil :size="20" />
+        <UiSvgIcon src="/icons/pen.svg" class="size-5" />
         Edit
       </button>
       <div class="flex gap-4 items-center">

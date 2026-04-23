@@ -33,13 +33,15 @@ function isActive(href: string) {
         </div>
       </div>
 
-      <div class="flex items-center justify-between text-sm leading-[1.5]">
-        <span class="text-[#666]">Projects backed</span>
-        <span class="text-[#b3b3b3]">5</span>
-      </div>
-      <div class="flex items-center justify-between text-sm leading-[1.5]">
-        <span class="text-[#666]">Unclaimed tokens</span>
-        <span class="text-brand-secondary-50">$450</span>
+      <div class="flex items-start text-sm leading-[1.5]">
+        <div class="flex flex-1 flex-col gap-4">
+          <span class="text-[#666]">Projects backed</span>
+          <span class="text-[#666]">Unclaimed tokens</span>
+        </div>
+        <div class="ml-5 flex min-w-[72px] flex-col gap-4 pl-4 text-left">
+          <span class="text-[#b3b3b3]">5</span>
+          <span class="text-brand-secondary-50">$450</span>
+        </div>
       </div>
     </div>
 
@@ -61,7 +63,7 @@ function isActive(href: string) {
         </div>
         <span
           v-if="item.badge"
-          class="flex size-[22px] items-center justify-center rounded-xl bg-[rgba(255,153,0,0.68)] text-xs text-[#002147]"
+          class="flex h-7 min-w-[22px] items-center justify-center rounded-full bg-[rgba(255,153,0,0.68)] px-1.5 text-xs leading-none text-[#002147]"
         >
           {{ item.badge }}
         </span>

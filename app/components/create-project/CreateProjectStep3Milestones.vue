@@ -5,12 +5,14 @@ import {
   ArrowLeft,
   ArrowRight,
   Calendar,
+  ImageIcon,
   Lock,
   Plus,
   Upload,
   XCircle,
 } from "lucide-vue-next";
 import {
+  milestoneSchema,
   step3Schema,
   type Step3FormValues,
   type MilestoneValue,
@@ -65,6 +67,10 @@ const fileInputRef = useTemplateRef<HTMLInputElement>("fileInputRef");
 const draftDeadlineInput =
   useTemplateRef<HTMLInputElement>("draftDeadlineInput");
 
+const fileError = ref("");
+const draftError = ref("");
+const editingIndex = ref<number | null>(null);
+
 function openDraftDeadlinePicker() {
   const el = draftDeadlineInput.value;
   if (!el) return;
@@ -83,19 +89,23 @@ function formatDraftDeadlineDisplay(iso: string): string {
   });
 }
 
-const { handleSubmit, values, setFieldValue } = useForm<Step3FormValues>({
-  validationSchema: toTypedSchema(step3Schema),
-  initialValues: {
-    mode: "automatic",
-    timeline: "3m",
-    milestones: [],
-    ...props.defaultValues,
-  },
-});
+const { handleSubmit, values, setFieldValue, errors, submitCount } =
+  useForm<Step3FormValues>({
+    validationSchema: toTypedSchema(step3Schema),
+    initialValues: {
+      mode: "automatic",
+      timeline: "3m",
+      milestones: [],
+      ...props.defaultValues,
+    },
+  });
 
-const { fields, push } = useFieldArray<Step3FormValues, "milestones">(
-  "milestones",
-);
+const { fields, push, remove, update } = useFieldArray<
+  Step3FormValues,
+  "milestones"
+>("milestones");
+
+const hasErrors = computed(() => Object.keys(errors.value).length > 0);
 
 function formatCurrency(n: number) {
   return `$${Math.floor(n).toLocaleString()}`;
@@ -153,8 +163,8 @@ function handleSetupMilestones() {
   workingMode.value = selectedMode.value;
 }
 
-function handleAddMilestone() {
-  push({
+function buildMilestoneFromDraft(): MilestoneValue {
+  return {
     name: draft.value.name,
     description: draft.value.description,
     deliverable: draft.value.deliverable,
@@ -162,8 +172,11 @@ function handleAddMilestone() {
     pctOfTotal: parseFloat(draft.value.pctOfTotal) || 0,
     deadline: draft.value.deadline,
     link: draft.value.link,
-    attachments: draftFiles.value,
-  });
+    attachments: [...draftFiles.value],
+  };
+}
+
+function resetDraft() {
   draft.value = {
     name: "",
     unlockAmount: "",
@@ -174,20 +187,110 @@ function handleAddMilestone() {
     link: "",
   };
   draftFiles.value = [];
+  fileError.value = "";
+  draftError.value = "";
 }
 
-const ALLOWED_DOC_EXTENSIONS = ["pdf", "ppt", "pptx", "doc", "docx"] as const;
+function handleAddMilestone() {
+  const next = buildMilestoneFromDraft();
+  const parsed = milestoneSchema.safeParse(next);
+  if (!parsed.success) {
+    draftError.value =
+      parsed.error.issues[0]?.message ??
+      "Please fill the required milestone fields.";
+    return;
+  }
+  if (next.unlockAmount <= 0) {
+    draftError.value = "Unlock amount must be greater than 0.";
+    return;
+  }
+  if (!next.deadline) {
+    draftError.value = "Deadline is required.";
+    return;
+  }
+  if (editingIndex.value !== null) {
+    update(editingIndex.value, parsed.data);
+    editingIndex.value = null;
+  } else {
+    push(parsed.data);
+  }
+  resetDraft();
+}
+
+function handleEditRow(i: number) {
+  const m = fields.value[i]?.value;
+  if (!m) return;
+  draft.value = {
+    name: m.name ?? "",
+    unlockAmount: m.unlockAmount ? String(m.unlockAmount) : "",
+    pctOfTotal: m.pctOfTotal ? String(m.pctOfTotal) : "",
+    deadline: m.deadline ?? "",
+    deliverable: m.deliverable ?? "",
+    description: m.description ?? "",
+    link: m.link ?? "",
+  };
+  draftFiles.value = m.attachments ? [...m.attachments] : [];
+  editingIndex.value = i;
+  selectedMode.value = "manual";
+  setFieldValue("mode", "manual");
+  workingMode.value = "manual";
+}
+
+function handleRemoveRow(i: number) {
+  remove(i);
+  if (editingIndex.value === i) {
+    editingIndex.value = null;
+    resetDraft();
+  }
+}
+
+const ALLOWED_DOC_EXTENSIONS = [
+  "pdf",
+  "ppt",
+  "pptx",
+  "doc",
+  "docx",
+  "png",
+  "jpg",
+  "jpeg",
+  "gif",
+  "webp",
+  "svg",
+] as const;
+const ALLOWED_DOC_MIME = [
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+] as const;
 
 function isAllowedDoc(file: File): boolean {
   const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
-  return (ALLOWED_DOC_EXTENSIONS as readonly string[]).includes(ext);
+  const extOk = (ALLOWED_DOC_EXTENSIONS as readonly string[]).includes(ext);
+  const mimeOk =
+    !file.type ||
+    file.type.startsWith("image/") ||
+    (ALLOWED_DOC_MIME as readonly string[]).includes(file.type);
+  return extOk && mimeOk;
+}
+
+function isImageFile(file: { name: string; type: string }): boolean {
+  if ((file.type || "").startsWith("image/")) return true;
+  return /\.(png|jpe?g|gif|webp|svg)$/i.test(file.name);
 }
 
 function handleFileChange(e: Event) {
-  const files = Array.from((e.target as HTMLInputElement).files ?? []).filter(
-    isAllowedDoc,
+  const selected = Array.from((e.target as HTMLInputElement).files ?? []);
+  const valid = selected.filter(isAllowedDoc);
+  const rejectedCount = selected.length - valid.length;
+  fileError.value =
+    rejectedCount > 0
+      ? "Only PDF, DOC, DOCX, PPT, PPTX or image files are allowed."
+      : "";
+  draftFiles.value.push(
+    ...valid.map((f) => ({ name: f.name, type: f.type })),
   );
-  draftFiles.value.push(...files.map((f) => ({ name: f.name, type: f.type })));
   if (fileInputRef.value) fileInputRef.value.value = "";
 }
 
@@ -217,9 +320,16 @@ function cardTextColor(card: "automatic" | "manual") {
   return "#3a3a3a";
 }
 
-const onSubmit = handleSubmit((data) => {
-  emit("next", data as Step3FormValues);
-});
+const onSubmit = handleSubmit(
+  (data) => {
+    emit("next", data as Step3FormValues);
+  },
+  ({ errors: validationErrors }) => {
+    if (import.meta.dev) {
+      console.warn("[Step3] Validation failed:", validationErrors);
+    }
+  },
+);
 </script>
 
 <template>
@@ -234,40 +344,42 @@ const onSubmit = handleSubmit((data) => {
       completed and approved.
     </p>
 
-    <!-- Funding Rule box -->
-    <div
-      class="border rounded-[8px] p-6 flex flex-col gap-4"
-      style="background: rgba(0, 0, 128, 0.24); border-color: #156bb7">
-      <p
-        class="text-[18px] font-semibold uppercase tracking-[0.5px] text-[#2bced4]">
-        Funding Rule
-      </p>
-      <div class="text-base font-medium text-white">
-        <p>Total milestone funding must equal 85% of your raise</p>
-        <p>Example: Raise $50,000 → Milestones must total $42,500</p>
+    <template v-if="fields.length === 0">
+      <!-- Funding Rule box -->
+      <div
+        class="border rounded-[8px] p-6 flex flex-col gap-4"
+        style="background: rgba(0, 0, 128, 0.24); border-color: #156bb7">
+        <p
+          class="text-[18px] font-semibold uppercase tracking-[0.5px] text-[#2bced4]">
+          Funding Rule
+        </p>
+        <div class="text-base font-medium text-white">
+          <p>Total milestone funding must equal 85% of your raise</p>
+          <p>Example: Raise $50,000 → Milestones must total $42,500</p>
+        </div>
       </div>
-    </div>
 
-    <!-- How milestone funding works -->
-    <div class="flex flex-col gap-4">
-      <p class="text-base font-medium text-white">
-        🔓 How milestone funding works
-      </p>
-      <div class="flex gap-4 items-start text-base font-medium text-white">
-        <span class="w-[193px] shrink-0">Milestone 1</span>
-        <span class="flex-1"
-          >— Released automatically when your fundraise completes. You receive
-          these funds immediately to start building.</span
-        >
+      <!-- How milestone funding works -->
+      <div class="flex flex-col gap-4">
+        <p class="text-base font-medium text-white">
+          🔓 How milestone funding works
+        </p>
+        <div class="flex gap-4 items-start text-base font-medium text-white">
+          <span class="w-[193px] shrink-0">Milestone 1</span>
+          <span class="flex-1"
+            >— Released automatically when your fundraise completes. You receive
+            these funds immediately to start building.</span
+          >
+        </div>
+        <div class="flex gap-4 items-start text-base font-medium text-white">
+          <span class="w-[193px] shrink-0">Milestones 2 onwards</span>
+          <span class="flex-1"
+            >— Submit proof when complete. Your investors vote. If approved, the
+            next tranche is released.</span
+          >
+        </div>
       </div>
-      <div class="flex gap-4 items-start text-base font-medium text-white">
-        <span class="w-[193px] shrink-0">Milestones 2 onwards</span>
-        <span class="flex-1"
-          >— Submit proof when complete. Your investors vote. If approved, the
-          next tranche is released.</span
-        >
-      </div>
-    </div>
+    </template>
 
     <!-- Mode cards -->
     <template v-if="workingMode === null">
@@ -469,7 +581,7 @@ const onSubmit = handleSubmit((data) => {
 
       <!-- Added milestones summary -->
       <div v-if="fields.length > 0" class="flex flex-col gap-8">
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-6">
           <div
             class="border-b-2 border-white flex items-center gap-4 py-4 font-bold text-[16px] text-white">
             <p class="flex-1 min-w-0">Milestone Name</p>
@@ -508,6 +620,106 @@ const onSubmit = handleSubmit((data) => {
               <span class="font-bold text-[14px]">Milestone Description: </span
               >{{ field.value.description }}
             </div>
+            <a
+              v-if="field.value.link"
+              :href="field.value.link"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-[#2bced4] text-base font-medium underline break-all">
+              Supporting link
+            </a>
+            <div class="flex items-center justify-between gap-4">
+              <div
+                v-if="
+                  field.value.attachments && field.value.attachments.length > 0
+                "
+                class="rounded-[8px] border border-[#333] bg-[rgba(26,26,26,0.48)] px-4 py-3 flex items-center gap-3 flex-wrap">
+                <p class="text-[14px] text-[#d9d8d8] font-medium">
+                  Attachments
+                </p>
+                <div
+                  v-for="(att, ai) in field.value.attachments"
+                  :key="ai"
+                  class="flex items-center gap-2">
+                  <div
+                    class="relative border border-[#333] rounded-[6px] size-[52px] flex flex-col items-center justify-center gap-0.5 bg-[#1a1a1a] shrink-0 shadow-[inset_2.9px_2.9px_5.8px_0px_rgba(0,0,0,0.25)]">
+                    <UiSvgIcon
+                      v-if="
+                        (att.type || '').includes('pdf') ||
+                        att.name.toLowerCase().endsWith('.pdf')
+                      "
+                      src="/icons/pdf.svg"
+                      class="size-[22px]" />
+                    <UiSvgIcon
+                      v-else-if="
+                        (att.type || '').includes('ppt') ||
+                        (att.type || '').includes('presentation') ||
+                        att.name.toLowerCase().endsWith('.ppt') ||
+                        att.name.toLowerCase().endsWith('.pptx')
+                      "
+                      src="/icons/ppt.svg"
+                      class="size-[22px]" />
+                    <ImageIcon
+                      v-else-if="isImageFile(att)"
+                      :size="22"
+                      class="text-[#2bced4]" />
+                    <UiSvgIcon
+                      v-else
+                      src="/icons/pdf.svg"
+                      class="size-[22px]" />
+                    <span class="text-[9px] text-white font-medium">{{
+                      (att.type || "").includes("pdf") ||
+                      att.name.toLowerCase().endsWith(".pdf")
+                        ? "PDF"
+                        : (att.type || "").includes("ppt") ||
+                            (att.type || "").includes("presentation") ||
+                            att.name.toLowerCase().endsWith(".ppt") ||
+                            att.name.toLowerCase().endsWith(".pptx")
+                          ? "PPT"
+                          : isImageFile(att)
+                            ? "IMG"
+                            : "DOC"
+                    }}</span>
+                  </div>
+                  <div class="text-[11px] text-white leading-[1.3]">
+                    <p class="text-[#d9d8d8]">file name:</p>
+                    <p>
+                      {{
+                        att.name.length > 12
+                          ? att.name.slice(0, 10) + "..."
+                          : att.name
+                      }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div v-else />
+              <div class="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  class="text-[#d9d8d8] hover:text-white text-[12px] underline"
+                  @click="handleRemoveRow(i)">
+                  Remove
+                </button>
+                <button
+                  type="button"
+                  class="relative flex items-center gap-2 rounded-full border border-[#156bb7] px-6 py-3 text-[16px] font-semibold uppercase text-white overflow-hidden shadow-[inset_0px_4px_8px_0px_rgba(0,0,0,0.25)] transition-opacity hover:opacity-80"
+                  @click="handleEditRow(i)">
+                  <span
+                    aria-hidden="true"
+                    class="absolute inset-0 pointer-events-none rounded-[inherit]"
+                    style="
+                      background: linear-gradient(
+                        178.94deg,
+                        rgba(208, 217, 226, 0.1) 0.467%,
+                        rgba(255, 255, 255, 0.1) 96.1%
+                      );
+                    " />
+                  <UiSvgIcon src="/icons/pen.svg" class="size-5 relative" />
+                  <span class="relative">Edit Milestone</span>
+                </button>
+              </div>
+            </div>
           </div>
         </div>
         <div class="h-px w-full bg-[#333]" />
@@ -532,7 +744,7 @@ const onSubmit = handleSubmit((data) => {
             placeholder="How much funding you want released for this milestone" />
         </div>
 
-        <div v-if="fields.length >= 1" class="flex flex-col gap-2">
+        <div class="flex flex-col gap-2">
           <label class="text-base font-medium text-white"
             >Percentage % of total raise</label
           >
@@ -616,11 +828,19 @@ const onSubmit = handleSubmit((data) => {
                 <Upload :size="24" />
                 <span>Upload doc</span>
               </button>
-              <p class="text-[14px] text-[#666]">Pitch deck | Roadmap PDF</p>
+              <p class="text-[14px] text-[#666]">
+                Pitch deck | Roadmap PDF | Image
+              </p>
+              <p
+                v-if="fileError"
+                class="text-[13px] font-medium text-[#ff6b6b]"
+                role="alert">
+                {{ fileError }}
+              </p>
               <input
                 ref="fileInputRef"
                 type="file"
-                accept=".pdf,.ppt,.pptx,.doc,.docx,application/pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                accept=".pdf,.ppt,.pptx,.doc,.docx,.png,.jpg,.jpeg,.gif,.webp,.svg,application/pdf,application/vnd.ms-powerpoint,application/vnd.openxmlformats-officedocument.presentationml.presentation,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*"
                 multiple
                 class="sr-only"
                 @change="handleFileChange" />
@@ -650,6 +870,10 @@ const onSubmit = handleSubmit((data) => {
                     "
                     src="/icons/ppt.svg"
                     class="size-[27px]" />
+                  <ImageIcon
+                    v-else-if="isImageFile(file)"
+                    :size="27"
+                    class="text-[#2bced4]" />
                   <UiSvgIcon v-else src="/icons/pdf.svg" class="size-[27px]" />
                   <span class="text-[10px] text-white font-medium">{{
                     file.type.includes("pdf") ||
@@ -659,7 +883,9 @@ const onSubmit = handleSubmit((data) => {
                           file.name.toLowerCase().endsWith(".ppt") ||
                           file.name.toLowerCase().endsWith(".pptx")
                         ? "PPT"
-                        : "DOC"
+                        : isImageFile(file)
+                          ? "IMG"
+                          : "DOC"
                   }}</span>
                 </div>
                 <div class="text-[12.6px] text-white leading-[1.5]">
@@ -707,23 +933,39 @@ const onSubmit = handleSubmit((data) => {
         </div>
 
         <!-- Footer row -->
-        <div class="flex items-center justify-between">
-          <div class="flex flex-col gap-2">
-            <p class="text-base font-medium text-[#d9d8d8]">
-              Break your project into clear steps
-            </p>
-            <p class="text-base font-medium text-[#666]">{{ countLabel }}</p>
+        <div class="flex flex-col gap-3">
+          <p
+            v-if="draftError"
+            class="text-[13px] font-medium text-[#ff6b6b]"
+            role="alert">
+            {{ draftError }}
+          </p>
+          <div class="flex items-center justify-between">
+            <div class="flex flex-col gap-2">
+              <p class="text-base font-medium text-[#d9d8d8]">
+                Break your project into clear steps
+              </p>
+              <p class="text-base font-medium text-[#666]">{{ countLabel }}</p>
+            </div>
+            <button
+              type="button"
+              class="flex items-center gap-2 px-6 py-3 rounded-full border border-[#156bb7] bg-[#d9d8d8] text-[18px] font-semibold uppercase text-[#002147] shadow-[2px_2px_8px_0px_rgba(0,0,0,0.12)] transition-opacity hover:opacity-80 shrink-0"
+              @click="handleAddMilestone">
+              <Plus :size="24" />
+              {{ editingIndex !== null ? "Update milestone" : "Add milestone" }}
+            </button>
           </div>
-          <button
-            type="button"
-            class="flex items-center gap-2 px-6 py-3 rounded-full border border-[#156bb7] bg-[#d9d8d8] text-[18px] font-semibold uppercase text-[#002147] shadow-[2px_2px_8px_0px_rgba(0,0,0,0.12)] transition-opacity hover:opacity-80 shrink-0"
-            @click="handleAddMilestone">
-            <Plus :size="24" />
-            Add milestone
-          </button>
         </div>
       </div>
     </template>
+
+    <!-- Submit validation error banner -->
+    <div
+      v-if="submitCount > 0 && hasErrors"
+      class="rounded-[8px] border border-[#ff6b6b] bg-[rgba(255,107,107,0.12)] px-6 py-4 text-[14px] font-medium text-white"
+      role="alert">
+      Please fix the highlighted fields before continuing.
+    </div>
 
     <!-- Navigation -->
     <div class="flex items-end justify-between pb-[72px]">

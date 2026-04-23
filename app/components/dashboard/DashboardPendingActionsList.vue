@@ -35,7 +35,7 @@ const actions = [
       class="flex items-center gap-2 rounded-lg bg-[#1a1a1a] p-4"
     >
       <div class="flex shrink-0 items-center rounded-lg border border-[#156bb7] bg-[#002147] p-4">
-        <UiSvgIcon src="/icons/vote.svg" class="size-8 text-white" />
+        <UiSvgIcon src="/icons/inbox.svg" class="size-8 text-white" />
       </div>
       <div class="flex flex-1 flex-col leading-[1.5]">
         <p class="text-xl text-white">{{ action.title }}</p>
