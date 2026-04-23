@@ -2,6 +2,11 @@
 
 type BadgeStatus = "auto-released" | "voting" | "locked" | "complete"
 
+interface MilestoneTag {
+  icon: string
+  label: string
+}
+
 interface Milestone {
   title: string
   description: string
@@ -11,7 +16,7 @@ interface Milestone {
   voteResult?: string
   status: BadgeStatus
   note?: string
-  tags?: string[]
+  tags?: MilestoneTag[]
 }
 
 const props = defineProps<{
@@ -50,33 +55,35 @@ const badgeConfig: Record<BadgeStatus, { label: string; iconSrc: string; bgClass
 </script>
 
 <template>
-  <div class="flex gap-6 rounded-2xl border border-[#333] bg-[#1a1a1a] p-6">
-    <div class="relative w-[56px] shrink-0">
-      <div class="absolute bottom-4 left-1/2 top-4 w-[2px] -translate-x-1/2 bg-[#333]" />
-      <div
-        v-for="(_, i) in props.milestones"
-        :key="i"
-        :class="cn(
-          'absolute left-1/2 flex size-8 -translate-x-1/2 items-center justify-center rounded-full border-[3px]',
-          i <= activeTimelineIndex
-            ? 'border-brand-secondary-50 bg-[#1a1a1a]'
-            : 'border-[#1a7c7f] bg-[#0f0f0f]',
-        )"
-        :style="{ top: `calc(${i * (100 / props.milestones.length) + 5}%)` }"
-      >
-        <span
-          :class="cn(
-            'size-3 rounded-full',
-            i <= activeTimelineIndex ? 'bg-brand-secondary-50' : 'bg-[#111]',
-          )"
+  <div
+    class="grid gap-x-6 gap-y-6 rounded-2xl border border-[#333] bg-[#1a1a1a] p-6"
+    style="grid-template-columns: 32px 1fr"
+  >
+    <template v-for="(m, i) in milestones" :key="i">
+      <div class="relative flex flex-col items-center">
+        <div
+          v-if="i > 0"
+          class="absolute -top-6 left-1/2 h-6 w-[2px] -translate-x-1/2 bg-brand-secondary-50"
+        />
+
+        <div
+          class="relative z-10 flex size-8 shrink-0 items-center justify-center rounded-full border-[3px] border-brand-secondary-50 bg-[#1a1a1a]"
+        >
+          <span
+            :class="cn(
+              'size-3 rounded-full bg-brand-secondary-50',
+              i > activeTimelineIndex && 'opacity-30',
+            )"
+          />
+        </div>
+
+        <div
+          v-if="i < milestones.length - 1"
+          class="w-[2px] flex-1 bg-brand-secondary-50"
         />
       </div>
-    </div>
 
-    <div class="flex flex-1 flex-col gap-6">
       <div
-        v-for="(m, i) in milestones"
-        :key="i"
         :class="cn(
           'relative flex flex-col gap-[15px] rounded-2xl bg-[#1a1a1a] p-6',
           m.status === 'voting' && 'border-[1.5px] border-brand-secondary-50',
@@ -120,13 +127,14 @@ const badgeConfig: Record<BadgeStatus, { label: string; iconSrc: string; bgClass
         <div v-if="m.tags?.length" class="flex flex-wrap gap-4">
           <div
             v-for="tag in m.tags"
-            :key="tag"
+            :key="tag.label"
             class="flex items-center gap-2 rounded-full bg-[#333] px-4 py-1 text-sm text-white shadow-[inset_1px_1px_3px_0px_rgba(0,0,0,0.25)]"
           >
-            {{ tag }}
+            <UiSvgIcon :src="tag.icon" :alt="tag.label" class="size-4 text-white" />
+            {{ tag.label }}
           </div>
         </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>

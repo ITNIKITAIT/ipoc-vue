@@ -1,6 +1,10 @@
 <template>
-  <div class="flex flex-col">
-    <span class="text-xl text-white">Welcome Back, Alex.</span>
-    <h1 class="text-[32px] font-bold leading-[1.3] text-white">Investor Dashboard</h1>
+  <div class="flex flex-col gap-2">
+    <p class="text-[24px] font-semibold leading-[1.28] tracking-[-0.12px] text-[#d9d8d8]">
+      Welcome Back, Alex.
+    </p>
+    <p class="text-[32px] font-semibold leading-[1.28] tracking-[-0.16px] text-neutral-10">
+      Investor Dashboard
+    </p>
   </div>
 </template>

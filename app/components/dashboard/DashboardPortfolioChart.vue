@@ -9,10 +9,11 @@ const data = [
   { month: "Jul", value: 14250 },
 ]
 
-const chartWidth = 500
-const chartHeight = 160
-const paddingX = 20
-const paddingTop = 10
+const chartWidth = 273
+const chartHeight = 120
+const paddingX = 12
+const paddingTop = 6
+const axisHeight = 18
 
 const maxValue = 15000
 const minValue = 6000
@@ -31,48 +32,44 @@ const areaPath = `${linePath} L${x(data.length - 1)},${chartHeight} L${x(0)},${c
 </script>
 
 <template>
-  <div class="flex flex-1 flex-col gap-4 rounded-3xl border border-[#1a1a1a] bg-[#1a1a1a] p-6">
-    <div class="flex flex-col gap-1">
-      <p class="text-base font-medium leading-[1.5] text-white">Total Portfolio Value</p>
-      <p class="text-[32px] font-semibold leading-[1.28] tracking-tight text-white">$14,250.00</p>
-      <span class="w-fit rounded-md bg-[rgba(0,128,0,0.3)] px-2 py-0.5 text-sm font-medium text-[#00e600]">
-        +12.6% (24h)
-      </span>
+  <div class="flex h-full flex-col gap-2 rounded-2xl bg-[#1a1a1a] p-6">
+    <p class="text-base font-medium leading-[1.5] text-white">Total Portfolio Value</p>
+    <p class="text-[32px] font-semibold leading-[1.28] tracking-[-0.16px] text-white">$14,250.00</p>
+    <span class="w-fit rounded-lg bg-[#115255] px-2 py-1 text-sm leading-[1.5] text-[#00e600]">
+      + 12.5% (24h)↑
+    </span>
+
+    <div class="mt-2 overflow-hidden rounded-lg" :style="{ width: `${chartWidth}px`, height: '138px' }">
+      <svg
+        :width="chartWidth"
+        :height="chartHeight + axisHeight"
+        :viewBox="`0 0 ${chartWidth} ${chartHeight + axisHeight}`"
+        class="block"
+      >
+        <defs>
+          <linearGradient id="portfolioGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stop-color="#00e600" stop-opacity="0.25" />
+            <stop offset="95%" stop-color="#00e600" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+
+        <path :d="areaPath" fill="url(#portfolioGradient)" />
+        <path :d="linePath" fill="none" stroke="#00e600" stroke-width="1.5" />
+
+        <text
+          v-for="(d, i) in data"
+          :key="'label-' + i"
+          :x="x(i)"
+          :y="chartHeight + 12"
+          text-anchor="middle"
+          fill="#666"
+          font-size="8"
+        >
+          {{ d.month }}
+        </text>
+      </svg>
     </div>
 
-    <svg :width="chartWidth" :height="chartHeight + 30" :viewBox="`0 0 ${chartWidth} ${chartHeight + 30}`" class="w-full">
-      <defs>
-        <linearGradient id="portfolioGradient" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="5%" stop-color="#2bced4" stop-opacity="0.3" />
-          <stop offset="95%" stop-color="#2bced4" stop-opacity="0" />
-        </linearGradient>
-      </defs>
-
-      <path :d="areaPath" fill="url(#portfolioGradient)" />
-      <path :d="linePath" fill="none" stroke="#2bced4" stroke-width="2" />
-
-      <circle
-        v-for="(d, i) in data"
-        :key="i"
-        :cx="x(i)"
-        :cy="y(d.value)"
-        r="3"
-        fill="#2bced4"
-      />
-
-      <text
-        v-for="(d, i) in data"
-        :key="'label-' + i"
-        :x="x(i)"
-        :y="chartHeight + 20"
-        text-anchor="middle"
-        fill="#666"
-        font-size="10"
-      >
-        {{ d.month }}
-      </text>
-    </svg>
-
-    <p class="text-xs text-[#666]">Total Portfolio Value</p>
+    <p class="text-xs leading-[1.5] text-[#666]">Total Portfolio Value</p>
   </div>
 </template>

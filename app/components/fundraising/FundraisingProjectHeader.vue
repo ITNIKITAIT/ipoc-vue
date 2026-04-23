@@ -53,16 +53,16 @@ withDefaults(defineProps<{
         </div>
 
         <div class="flex gap-4 items-center shrink-0">
-          <button class="border border-[#d9d8d8] rounded-full p-3 flex items-center justify-center">
+          <button class="border border-[#d9d8d8] rounded-full p-3 flex items-center justify-center opacity-75 hover:opacity-100 transition-opacity">
             <img src="/icons/website.svg" alt="Website" width="24" height="24">
           </button>
-          <button class="border border-[#d9d8d8] rounded-full p-3 flex items-center justify-center">
+          <button class="border border-[#d9d8d8] rounded-full p-3 flex items-center justify-center opacity-75 hover:opacity-100 transition-opacity">
             <img src="/icons/in.svg" alt="LinkedIn" width="24" height="24">
           </button>
-          <button class="border border-[#d9d8d8] rounded-full p-3 flex items-center justify-center">
+          <button class="border border-[#d9d8d8] rounded-full p-3 flex items-center justify-center opacity-75 hover:opacity-100 transition-opacity">
             <img src="/icons/X.svg" alt="X" width="24" height="24">
           </button>
-          <button class="border border-[#d9d8d8] rounded-full p-3 flex items-center justify-center">
+          <button class="border border-[#d9d8d8] rounded-full p-3 flex items-center justify-center opacity-75 hover:opacity-100 transition-opacity">
             <Share :size="24" class="text-white" />
           </button>
         </div>

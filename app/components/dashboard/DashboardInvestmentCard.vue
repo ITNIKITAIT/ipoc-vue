@@ -8,7 +8,7 @@ const props = withDefaults(defineProps<{
   status: CardStatus
   percentage?: number
   raisedLabel?: string
-  stats: { label: string; value: string; highlight?: boolean }[]
+  stats: { label: string; value: string; subValue?: string; highlight?: boolean; negative?: boolean }[]
   profitLoss?: { value: string; positive: boolean }
   failedBadge?: string
   showClaimTokens?: boolean
@@ -23,9 +23,9 @@ const props = withDefaults(defineProps<{
 })
 
 const statusConfig: Record<CardStatus, { label: string; bg: string }> = {
-  fundraising: { label: "Fundraising", bg: "bg-[rgba(0,128,0,0.68)]" },
-  "live-trading": { label: "Live Trading", bg: "bg-[rgba(0,128,0,0.68)]" },
-  failed: { label: "Raise failed \u2014 funds available", bg: "bg-[#e60000]" },
+  fundraising: { label: "Fundraising", bg: "bg-semantic-success" },
+  "live-trading": { label: "Live Trading", bg: "bg-semantic-information" },
+  failed: { label: "Raise failed \u2014 funds available", bg: "bg-semantic-error" },
 }
 
 const statusStyle = computed(() => statusConfig[props.status])
@@ -59,6 +59,7 @@ const statusStyle = computed(() => statusConfig[props.status])
           <div :class="cn('flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-bold text-white', statusStyle.bg)">
             <UiSvgIcon v-if="status === 'live-trading'" src="/icons/lin-cart.svg" class="size-4 text-white" />
             <UiSvgIcon v-if="status === 'fundraising'" src="/icons/launch.svg" class="size-4 text-white" />
+            <UiSvgIcon v-if="status === 'failed'" src="/icons/warn.svg" class="size-4 text-white" />
             {{ statusStyle.label }}
           </div>
         </div>
@@ -77,11 +78,19 @@ const statusStyle = computed(() => statusConfig[props.status])
         </div>
 
         <div class="flex flex-col gap-3 rounded-2xl bg-[rgba(51,51,51,0.38)] px-6 py-4">
-          <div class="flex gap-4">
+          <div :class="cn('gap-4', status === 'failed' ? 'grid grid-cols-2' : 'flex')">
             <div v-for="stat in stats" :key="stat.label" class="flex flex-1 flex-col gap-1">
-              <p class="text-sm text-[#666]">{{ stat.label }}</p>
-              <p :class="cn('text-base font-bold', stat.highlight ? 'text-brand-secondary-50' : 'text-white')">
+              <p class="text-base font-medium leading-[1.5] text-[#666]">{{ stat.label }}</p>
+              <p
+                :class="cn(
+                  'text-[20px] leading-[1.5]',
+                  stat.negative ? 'text-semantic-error' : stat.highlight ? 'text-brand-secondary-30' : 'text-white',
+                )"
+              >
                 {{ stat.value }}
+              </p>
+              <p v-if="stat.subValue" class="text-sm leading-[1.5] text-[#666]">
+                {{ stat.subValue }}
               </p>
             </div>
           </div>
@@ -93,21 +102,36 @@ const statusStyle = computed(() => statusConfig[props.status])
           </div>
         </div>
 
-        <div class="flex gap-4">
-          <button v-if="showClaimTokens" class="rounded-full bg-brand-secondary-50 px-6 py-3 text-base font-semibold uppercase text-[#002147] hover:bg-brand-secondary-30">
-            Claim Tokens
+        <div class="flex flex-wrap items-center gap-4">
+          <button
+            v-if="showClaimTokens"
+            class="inline-flex items-center justify-center rounded-full border border-[#156bb7] bg-[#226062] px-6 py-3 text-[18px] font-semibold uppercase leading-[1.5] text-white shadow-[inset_0px_4px_8px_0px_rgba(0,0,0,0.25)] transition-colors hover:bg-[#2a7578]"
+          >
+            Claim tokens
           </button>
-          <button v-if="showVote" class="rounded-full bg-[rgba(255,153,0,0.68)] px-6 py-3 text-base font-semibold uppercase text-[#002147] hover:bg-[rgba(255,153,0,0.85)]">
+          <button
+            v-if="showVote"
+            class="inline-flex items-center justify-center rounded-full border border-[#156bb7] bg-[rgba(255,153,0,0.38)] px-6 py-3 text-[18px] font-semibold uppercase leading-[1.5] text-white shadow-[inset_0px_4px_8px_0px_rgba(0,0,0,0.25)] transition-colors hover:bg-[rgba(255,153,0,0.55)]"
+          >
             Vote
           </button>
-          <button v-if="showReinvest" class="rounded-full bg-[#e60000] px-6 py-3 text-base font-semibold uppercase text-white hover:bg-[#cc0000]">
-            Reinvest Funds
+          <button
+            v-if="showReinvest"
+            class="inline-flex items-center justify-center rounded-full border border-[#156bb7] bg-[rgba(43,206,212,0.38)] px-6 py-3 text-[18px] font-semibold uppercase leading-[1.5] text-white shadow-[inset_0px_4px_8px_0px_rgba(0,0,0,0.25)] transition-colors hover:bg-[rgba(43,206,212,0.55)]"
+          >
+            Reinvest funds
           </button>
-          <button v-if="showClaimToWallet" class="rounded-full border border-[#333] px-6 py-3 text-base font-semibold uppercase text-white hover:bg-white/5">
-            Claim to Wallet
+          <button
+            v-if="showClaimToWallet"
+            class="inline-flex items-center justify-center rounded-full border border-[#156bb7] bg-transparent px-6 py-3 text-[18px] font-semibold uppercase leading-[1.5] text-white shadow-[inset_0px_4px_8px_0px_rgba(0,0,0,0.25)] transition-colors hover:bg-white/5"
+          >
+            Claim to wallet
           </button>
-          <NuxtLink to="/fundraising/1" class="rounded-full border border-[#333] px-6 py-3 text-base font-semibold uppercase text-white hover:bg-white/5">
-            View Details
+          <NuxtLink
+            to="/fundraising/1"
+            class="inline-flex items-center justify-center rounded-full border border-[#156bb7] bg-transparent px-6 py-3 text-[18px] font-semibold uppercase leading-[1.5] text-white shadow-[inset_0px_4px_8px_0px_rgba(0,0,0,0.25)] transition-colors hover:bg-white/5"
+          >
+            View details
           </NuxtLink>
         </div>
       </div>

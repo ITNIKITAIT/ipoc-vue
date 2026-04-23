@@ -90,7 +90,7 @@ const status = ref<FundraisingStatus>("not-connected")
       <div v-if="status === 'failed'" class="flex gap-6 items-start">
         <div class="flex flex-col gap-6 flex-[0_0_781px]">
           <FundraisingProjectHeader
-            :badge="{ label: 'Failed', color: 'bg-[#e60000]' }"
+            :badge="{ label: 'Failed', color: 'bg-[#e60000]', icon: '/icons/warn.svg' }"
             progress-color="#e60000"
             funded-text="50% raise failed"
             raised-amount="$25,000"

@@ -88,7 +88,7 @@ const activeTab = ref<"action" | "history">("action")
         :yes-percentage="60"
         :no-percentage="40"
         quorum-note="Quorum rules pending — confirm with Mike before launch"
-        urgent
+        :urgent="false"
       />
     </template>
 

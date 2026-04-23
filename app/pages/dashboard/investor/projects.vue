@@ -49,7 +49,7 @@ const activeTab = ref("fundraising")
         :stats="[
           { label: 'Invested', value: '$2,000 USDT' },
           { label: 'Total tokens', value: '50,000 GRP' },
-          { label: 'Available to claim', value: '5,000 GRP', highlight: true },
+          { label: 'Available to claim', value: '5,000 GRP', subValue: '=$200 — cliff ends Sep 20, 2026' },
         ]"
         :profit-loss="{ value: '$500 (+25%)', positive: true }"
         show-claim-tokens
@@ -63,7 +63,7 @@ const activeTab = ref("fundraising")
         :stats="[
           { label: 'Invested', value: '$2,000 USDT' },
           { label: 'Total tokens', value: '50,000 THDC' },
-          { label: 'Available to claim', value: '5,000 THDC', highlight: true },
+          { label: 'Available to claim', value: '5,000 THDC', subValue: '=$200' },
         ]"
         :profit-loss="{ value: '$500 (+25%)', positive: true }"
         show-claim-tokens
@@ -80,7 +80,7 @@ const activeTab = ref("fundraising")
         :stats="[
           { label: 'Invested', value: '$2,000 USDT' },
           { label: 'Liquidity Pool staging returned', value: '$250 USDT' },
-          { label: 'IPOC fee (non-refundable)', value: '-$50 USDT' },
+          { label: 'IPOC fee (non-refundable)', value: '−$50 USDT', negative: true },
           { label: 'Total available', value: '$1,950 USDT' },
         ]"
         show-reinvest

@@ -7,7 +7,11 @@ const milestones = [
     deadline: "Dec 15, 2025",
     status: "auto-released" as const,
     note: "Released automatically when fundraise completed \u2014 no vote required.",
-    tags: ["GitHub Repo", "Demo Video", "Screenshots"],
+    tags: [
+      { icon: "/icons/link.svg", label: "GitHub Repo" },
+      { icon: "/icons/demo.svg", label: "Demo Video" },
+      { icon: "/icons/screenshot.svg", label: "Screenshots" },
+    ],
   },
   {
     title: "Milestone 2 \u2014 Mainnet Deployment",
@@ -17,7 +21,11 @@ const milestones = [
     timeLeft: "6 days 14 hours",
     voteResult: "62% For / 38% Against (3,450 votes)",
     status: "locked" as const,
-    tags: ["Twitter Campaign", "Influencer Plan", "Ad Spend Receipt"],
+    tags: [
+      { icon: "/icons/twitter.svg", label: "Twitter Campaign" },
+      { icon: "/icons/influencer_plan.svg", label: "Influencer Plan" },
+      { icon: "/icons/ad.svg", label: "Ad Spend Receipt" },
+    ],
   },
   {
     title: "Milestone 3 \u2014 Growth & Expansion",

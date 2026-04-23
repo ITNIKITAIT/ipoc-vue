@@ -17,8 +17,8 @@ const summaryRows = [
     </div>
 
     <div class="flex flex-col gap-4">
-      <div v-for="row in summaryRows" :key="row.label" class="flex items-start justify-between pb-2 border-b border-[#1a1a1a]">
-        <p class="text-base font-medium text-[#666] leading-[1.5]">{{ row.label }}</p>
+      <div v-for="row in summaryRows" :key="row.label" class="flex items-start justify-between gap-4 pb-2 border-b border-[#1a1a1a]">
+        <p class="text-base font-medium text-[#666] leading-[1.5] whitespace-nowrap">{{ row.label }}</p>
         <p :class="['text-base font-medium leading-[1.5] whitespace-nowrap', row.color]">{{ row.value }}</p>
       </div>
     </div>
@@ -36,9 +36,9 @@ const summaryRows = [
         </div>
       </div>
       <button class="relative w-full flex items-center justify-center px-6 py-3 rounded-full overflow-hidden shadow-[0px_0px_2px_0px_rgba(0,0,0,0.1),0px_1px_8px_0px_rgba(0,0,0,0.1)]">
-        <div class="absolute inset-0 backdrop-blur-md bg-[rgba(43,206,212,0.4)] rounded-full" />
-        <div class="absolute inset-0 shadow-[inset_1px_1px_1px_0.5px_rgba(255,255,255,0.75),inset_-1px_-1px_1px_0.5px_rgba(255,255,255,0.75),inset_0px_0px_1px_1px_rgba(255,255,255,0.15),inset_0px_0px_16px_0px_#f2f2f2] rounded-full" />
-        <span class="relative z-10 text-lg font-semibold text-white uppercase tracking-normal leading-[1.5] text-nowrap">Reinvest funds</span>
+        <div class="absolute inset-0 backdrop-blur-[6px] bg-[rgba(43,206,212,0.4)] rounded-full" />
+        <div class="absolute inset-0 rounded-full shadow-[inset_3px_3px_0.5px_-3.5px_rgba(255,255,255,0.75),inset_3px_3px_0.5px_-3.5px_rgba(255,255,255,0.8),inset_1px_1px_1px_0.5px_rgba(255,255,255,0.75),inset_-1px_-1px_1px_0.5px_rgba(255,255,255,0.75),inset_0px_0px_1px_1px_rgba(255,255,255,0.15),inset_0px_0px_1px_1px_#999,inset_0px_0px_16px_0px_#f2f2f2]" />
+        <span class="relative z-10 text-[18px] font-semibold text-white uppercase tracking-normal leading-[1.5] text-nowrap">Reinvest funds</span>
       </button>
     </div>
 
@@ -53,9 +53,9 @@ const summaryRows = [
         </div>
       </div>
       <button class="relative w-full flex items-center justify-center px-6 py-3 rounded-full overflow-hidden shadow-[0px_0px_2px_0px_rgba(0,0,0,0.1),0px_1px_8px_0px_rgba(0,0,0,0.1)]">
-        <div class="absolute inset-0 backdrop-blur-md bg-[rgba(51,51,51,0.38)] rounded-full" />
-        <div class="absolute inset-0 shadow-[inset_1px_1px_1px_0.5px_rgba(255,255,255,0.75),inset_-1px_-1px_1px_0.5px_rgba(255,255,255,0.75),inset_0px_0px_1px_1px_rgba(255,255,255,0.15),inset_0px_0px_16px_0px_#f2f2f2] rounded-full" />
-        <span class="relative z-10 text-lg font-semibold text-[#666] uppercase tracking-normal leading-[1.5] text-nowrap">Claim to my wallet</span>
+        <div class="absolute inset-0 backdrop-blur-[6px] bg-black rounded-full" />
+        <div class="absolute inset-0 rounded-full shadow-[inset_3px_3px_0.5px_-3.5px_rgba(255,255,255,0.75),inset_3px_3px_0.5px_-3.5px_rgba(255,255,255,0.8),inset_1px_1px_1px_0.5px_rgba(255,255,255,0.75),inset_-1px_-1px_1px_0.5px_rgba(255,255,255,0.75),inset_0px_0px_1px_1px_rgba(255,255,255,0.15),inset_0px_0px_1px_1px_#999,inset_0px_0px_16px_0px_#f2f2f2]" />
+        <span class="relative z-10 text-[18px] font-semibold text-[#666] uppercase tracking-normal leading-[1.5] text-nowrap">Claim to my wallet</span>
       </button>
     </div>
 

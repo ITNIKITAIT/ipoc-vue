@@ -14,6 +14,8 @@ const route = useRoute()
 
 const dashboardRoots = ["/dashboard", "/dashboard/investor"]
 
+const isInvestor = computed(() => route.path.startsWith("/dashboard/investor"))
+
 function isActive(href: string) {
   if (dashboardRoots.includes(href)) return route.path === href
   return route.path.startsWith(href)
@@ -51,19 +53,20 @@ function isActive(href: string) {
         :key="item.href"
         :to="item.href"
         :class="cn(
-          'flex h-12 items-center justify-between px-4 py-2 text-xl font-medium leading-[1.5] text-white transition-colors',
+          'flex h-12 items-center justify-between px-4 py-2 font-roboto text-xl font-medium leading-[1.5] text-white transition-colors',
           isActive(item.href)
-            ? 'border-l-[3px] border-brand-secondary-50 bg-[rgba(17,82,85,0.8)]'
-            : 'border-l-[3px] border-transparent hover:bg-white/5',
+            ? 'border-l-[8px] border-brand-secondary-50 bg-[rgba(17,82,85,0.8)]'
+            : 'border-l-[8px] border-transparent hover:bg-white/5',
         )"
       >
-        <div class="flex items-center gap-3">
-          <UiSvgIcon :src="item.icon" class="size-6 text-white" />
-          <span>{{ item.label }}</span>
-        </div>
+        <UiSvgIcon :src="item.icon" class="size-6 text-white" />
+        <span class="flex-1 text-center">{{ item.label }}</span>
         <span
           v-if="item.badge"
-          class="flex h-7 min-w-[22px] items-center justify-center rounded-full bg-[rgba(255,153,0,0.68)] px-1.5 text-xs leading-none text-[#002147]"
+          :class="cn(
+            'flex h-7 min-w-[22px] items-center justify-center rounded-full bg-[rgba(255,153,0,0.68)] px-1.5 text-[12.9px] leading-none',
+            isInvestor ? 'text-white' : 'text-[#002147]',
+          )"
         >
           {{ item.badge }}
         </span>

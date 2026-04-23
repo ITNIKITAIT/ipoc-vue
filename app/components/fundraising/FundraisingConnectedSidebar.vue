@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Info, ChevronDown } from "lucide-vue-next"
+import { ChevronDown } from "lucide-vue-next"
 
 const presets = ["25%", "50%", "75%", "MAX%"]
 </script>
@@ -62,7 +62,10 @@ const presets = ["25%", "50%", "75%", "MAX%"]
     <div class="flex flex-col">
       <div class="flex items-start justify-between">
         <p class="text-xs text-[#d9d8d8] leading-[1.5]">Vesting schedule</p>
-        <Info :size="24" class="text-[#d9d8d8]" />
+        <UiInfoTooltip
+          :size="24"
+          content="Tokens unlock gradually after fundraising. 6-month cliff means no tokens release during the first 6 months; then 12-month linear vesting releases your allocation evenly each month."
+        />
       </div>
       <p class="text-base font-medium text-[#d9d8d8] leading-[1.5]">6-month cliff → 12-month linear</p>
     </div>

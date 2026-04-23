@@ -1,25 +1,24 @@
 <script setup lang="ts">
-import { Lock, Zap, Vote, Link as LinkIcon, PlayCircle, Image as ImageIcon, FileText } from "lucide-vue-next"
+import { Lock, Zap, Vote } from "lucide-vue-next"
 
 type MilestoneStatus = "auto-released" | "voting" | "locked"
 
 const milestones = [
   {
-    title: "Milestone 1 \u2014 MVP Development",
+    title: "Milestone 1 — MVP Development",
     description: "Deliver working web app with wallet connect, project creation, and marketplace browse.",
     unlock: "$10,000 (20%)",
     deadline: "Dec 15, 2025",
-    autoReleaseNote: "Released automatically when fundraise completed \u2014 no vote required.",
+    autoReleaseNote: "Released automatically when fundraise completed — no vote required.",
     status: "auto-released" as MilestoneStatus,
     tags: [
-      { icon: LinkIcon, label: "GitHub Repo" },
-      { icon: PlayCircle, label: "Demo Video" },
-      { icon: ImageIcon, label: "Screenshots" },
+      { icon: "/icons/link.svg", label: "GitHub Repo" },
+      { icon: "/icons/demo.svg", label: "Demo Video" },
+      { icon: "/icons/screenshot.svg", label: "Screenshots" },
     ],
-    borderColor: "#1a7c7f",
   },
   {
-    title: "Milestone 2 \u2014 Mainnet Deployment",
+    title: "Milestone 2 — Mainnet Deployment",
     description: "Deliver working web app with wallet connect, project creation, and marketplace browse.",
     unlock: "$15,000 (30%)",
     deadline: "Jan 20, 2026",
@@ -27,20 +26,18 @@ const milestones = [
     voteResult: "62% For / 38% Against (3,450 votes)",
     status: "voting" as MilestoneStatus,
     tags: [
-      { icon: FileText, label: "Twitter Campaign" },
-      { icon: FileText, label: "Influencer Plan" },
-      { icon: FileText, label: "Ad Spend Receipt" },
+      { icon: "/icons/twitter.svg", label: "Twitter Campaign" },
+      { icon: "/icons/influencer_plan.svg", label: "Influencer Plan" },
+      { icon: "/icons/ad.svg", label: "Ad Spend Receipt" },
     ],
-    borderColor: "#2bced4",
   },
   {
-    title: "Milestone 3\u2014 Growth & Expansion",
+    title: "Milestone 3— Growth & Expansion",
     description: "Deliver working web app with wallet connect, project creation, and marketplace browse.",
     unlock: "$25,000 (50%)",
     deadline: "Jul 2, 2026",
     status: "locked" as MilestoneStatus,
     tags: [],
-    borderColor: "transparent",
   },
 ]
 </script>
@@ -52,21 +49,31 @@ const milestones = [
       <p class="text-base font-medium text-white leading-[1.5]">Track project progress and fund releases by milestone.</p>
     </div>
 
-    <div class="flex gap-6 items-start">
-      <!-- Timeline -->
-      <div class="relative shrink-0 w-[41px] self-stretch">
-        <div class="absolute left-1/2 top-4 bottom-4 w-[2px] bg-[#333] -translate-x-1/2" />
-        <div class="absolute left-1/2 -translate-x-1/2 size-[20px] rounded-full bg-[#2bced4]" style="top: 2%" />
-        <div class="absolute left-1/2 -translate-x-1/2 size-[20px] rounded-full border-2 border-[#2bced4] bg-transparent" style="top: 38%" />
-        <div class="absolute left-1/2 -translate-x-1/2 size-[20px] rounded-full border-2 border-[#666] bg-[#1a1a1a]" style="top: 72%" />
-      </div>
+    <div class="relative flex flex-col gap-6">
+      <div
+        v-for="(m, i) in milestones"
+        :key="i"
+        class="relative flex gap-6 items-start"
+      >
+        <!-- Timeline column -->
+        <div class="relative shrink-0 w-[41px] self-stretch">
+          <!-- vertical line below circle until next row -->
+          <div
+            v-if="i < milestones.length - 1"
+            class="absolute left-1/2 top-[40px] -bottom-6 w-[2px] bg-[#2bced4] -translate-x-1/2"
+          />
+          <!-- circle -->
+          <div class="relative z-10 size-[40px] rounded-full border-[4px] border-[#2bced4] bg-[#041525] flex items-center justify-center">
+            <div
+              v-if="i === 0"
+              class="size-[14px] rounded-full bg-[#2bced4]"
+            />
+          </div>
+        </div>
 
-      <!-- Cards -->
-      <div class="flex flex-col gap-6 flex-1">
+        <!-- Card -->
         <div
-          v-for="(m, i) in milestones"
-          :key="i"
-          class="relative bg-[#1a1a1a] rounded-2xl p-6 flex flex-col gap-4"
+          class="relative bg-[#1a1a1a] rounded-2xl p-6 flex flex-col gap-4 flex-1"
           :style="{ border: m.status === 'voting' ? '1.5px solid #2bced4' : m.status === 'auto-released' ? '1px solid #1a7c7f' : 'none' }"
         >
           <!-- Status badge -->
@@ -122,7 +129,7 @@ const milestones = [
             <div v-for="t in m.tags" :key="t.label" class="relative flex items-center gap-2 px-4 py-1 rounded-[40px] overflow-hidden">
               <div class="absolute inset-0 bg-[#333] rounded-[40px]" />
               <div class="absolute inset-0 shadow-[inset_1px_1px_3px_0px_rgba(0,0,0,0.25)] rounded-[40px]" />
-              <component :is="t.icon" :size="16" class="text-white relative z-10" />
+              <UiSvgIcon :src="t.icon" :alt="t.label" class="size-4 text-white relative z-10" />
               <span class="text-sm text-white leading-[1.5] relative z-10">{{ t.label }}</span>
             </div>
           </div>
