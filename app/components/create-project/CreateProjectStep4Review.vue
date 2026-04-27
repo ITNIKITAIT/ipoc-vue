@@ -44,6 +44,28 @@ function formatDate(dateStr: string) {
     year: "numeric",
   });
 }
+
+function attachmentLabel(att: { name: string; type?: string }): string {
+  const name = att.name.toLowerCase();
+  const type = (att.type || "").toLowerCase();
+  if (type.includes("pdf") || name.endsWith(".pdf")) return "PDF";
+  if (
+    type.includes("ppt") ||
+    type.includes("presentation") ||
+    name.endsWith(".ppt") ||
+    name.endsWith(".pptx")
+  )
+    return "PPT";
+  if (type.startsWith("image/") || /\.(png|jpe?g|gif|webp|svg)$/i.test(name))
+    return "IMG";
+  if (
+    type.includes("word") ||
+    name.endsWith(".doc") ||
+    name.endsWith(".docx")
+  )
+    return "DOCX";
+  return "FILE";
+}
 </script>
 
 <template>
@@ -238,9 +260,7 @@ function formatDate(dateStr: string) {
                     class="text-[#2bced4]" />
                   <FileText v-else :size="18" class="text-[#d9d8d8]" />
                   <span class="text-[9px] font-medium leading-none">{{
-                    (att.type || att.name.split(".").pop() || "FILE")
-                      .toUpperCase()
-                      .slice(0, 3)
+                    attachmentLabel(att)
                   }}</span>
                 </div>
               </div>
@@ -345,7 +365,7 @@ function formatDate(dateStr: string) {
         type="button"
         class="flex items-center gap-2 border border-[#156bb7] rounded-full px-6 py-3 text-white text-lg font-semibold uppercase"
         @click="emit('edit')">
-        <UiSvgIcon src="/icons/pen.svg" class="size-5" />
+        <UiSvgIcon src="/icons/edit.svg" class="size-5" />
         Edit
       </button>
       <div class="flex gap-4 items-center">

@@ -70,9 +70,8 @@ function handleImageChange(e: Event) {
 
       <div class="shrink-0 w-[316px]">
         <div class="flex flex-col gap-2 items-end">
-          <div class="flex flex-col text-right">
-            <span class="text-white text-base font-medium">Profile image</span>
-            <span class="text-white text-base font-medium">(Recommended)</span>
+          <div class="text-right">
+            <span class="text-white text-base font-medium whitespace-nowrap">Profile image (Recommended)</span>
           </div>
           <div class="flex gap-4 items-start">
             <button

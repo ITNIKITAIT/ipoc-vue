@@ -36,7 +36,7 @@ const detailsLink = computed(() => {
 
 <template>
   <div
-    class="flex w-full h-fit flex-col gap-small rounded-b-lg border-[0.15px] border-[#C0C0C0]/30 bg-oxford-blue px-4 pt-0 pb-6 shadow-[2px_4px_8px_0px_rgba(0,0,0,0.16)]">
+    class="flex w-full h-fit flex-col gap-small rounded-b-lg border-[0.15px] border-[#C0C0C0]/30 bg-oxford-blue px-4 pt-0 pb-9 shadow-[2px_4px_8px_0px_rgba(0,0,0,0.16)]">
     <div class="flex items-start justify-center gap-tiny">
       <ProductsStatusBadge :status="status" />
       <ProductsTrustScoreBadge :score="trustScore" :status="status" />
@@ -91,14 +91,11 @@ const detailsLink = computed(() => {
           :percentage="(data as LiveTradingData).milestoneProgress"
           :description="`${(data as LiveTradingData).milestonesCompleted} of ${(data as LiveTradingData).milestonesTotal} milestones completed`"
           color="milestone" />
-        <div
-          v-for="(row, idx) in getDetailRows((data as LiveTradingData).details)"
-          :key="idx"
-          class="flex items-start justify-between">
+        <div class="grid grid-cols-3 items-start gap-x-tiny gap-y-tiny">
           <div
-            v-for="detail in row"
+            v-for="detail in (data as LiveTradingData).details"
             :key="detail.label"
-            class="flex flex-1 flex-col">
+            class="flex flex-col">
             <span class="text-body-s text-text-70">{{ detail.label }}</span>
             <span
               :class="
@@ -122,9 +119,14 @@ const detailsLink = computed(() => {
           :key="idx"
           class="flex items-start justify-between">
           <div
-            v-for="detail in row"
+            v-for="(detail, i) in row"
             :key="detail.label"
-            class="flex flex-1 flex-col">
+            class="flex flex-1 flex-col"
+            :class="
+              i === row.length - 1 && row.length > 1
+                ? 'items-end text-right'
+                : ''
+            ">
             <span class="text-body-s text-text-70">{{ detail.label }}</span>
             <span
               :class="

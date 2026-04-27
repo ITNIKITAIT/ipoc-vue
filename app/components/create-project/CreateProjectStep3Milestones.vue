@@ -288,9 +288,7 @@ function handleFileChange(e: Event) {
     rejectedCount > 0
       ? "Only PDF, DOC, DOCX, PPT, PPTX or image files are allowed."
       : "";
-  draftFiles.value.push(
-    ...valid.map((f) => ({ name: f.name, type: f.type })),
-  );
+  draftFiles.value.push(...valid.map((f) => ({ name: f.name, type: f.type })));
   if (fileInputRef.value) fileInputRef.value.value = "";
 }
 
@@ -339,7 +337,6 @@ const onSubmit = handleSubmit(
       Milestones
     </h1>
     <p class="flex items-center gap-2 text-base font-medium text-white">
-      <Lock :size="18" class="text-white shrink-0" />
       Funds are locked in a vault and released in stages as milestones are
       completed and approved.
     </p>
@@ -530,19 +527,10 @@ const onSubmit = handleSubmit(
             </p>
             <button
               type="button"
-              class="relative flex items-center gap-2 rounded-full border border-[#156bb7] px-6 py-3 text-[18px] font-semibold uppercase text-white overflow-hidden shadow-[inset_0px_4px_8px_0px_rgba(0,0,0,0.25)] transition-opacity hover:opacity-80"
+              class="relative flex items-center gap-2 rounded-full border border-[#156bb7] px-6 py-3 text-[18px] font-semibold uppercase text-white overflow-hidden shadow-[inset_0px_8px_12px_-4px_rgba(0,0,0,0.5)] transition-opacity hover:opacity-80"
+              style="background: linear-gradient(0deg, #21384f 0%, #21384f 50%, #21384f 100%);"
               @click="handleEditMilestones">
-              <span
-                aria-hidden="true"
-                class="absolute inset-0 pointer-events-none rounded-[inherit]"
-                style="
-                  background: linear-gradient(
-                    178.94deg,
-                    rgba(208, 217, 226, 0.1) 0.467%,
-                    rgba(255, 255, 255, 0.1) 96.1%
-                  );
-                " />
-              <UiSvgIcon src="/icons/pen.svg" class="size-6 relative" />
+              <UiSvgIcon src="/icons/edit.svg" class="size-6 relative" />
               <span class="relative">Edit Milestones</span>
             </button>
           </div>
@@ -703,19 +691,10 @@ const onSubmit = handleSubmit(
                 </button>
                 <button
                   type="button"
-                  class="relative flex items-center gap-2 rounded-full border border-[#156bb7] px-6 py-3 text-[16px] font-semibold uppercase text-white overflow-hidden shadow-[inset_0px_4px_8px_0px_rgba(0,0,0,0.25)] transition-opacity hover:opacity-80"
+                  class="relative flex items-center gap-2 rounded-full border border-[#156bb7] px-6 py-3 text-[16px] font-semibold uppercase text-white overflow-hidden shadow-[inset_0px_8px_12px_-4px_rgba(0,0,0,0.5)] transition-opacity hover:opacity-80"
+                  style="background: linear-gradient(0deg, #21384f 0%, #21384f 50%, #21384f 100%);"
                   @click="handleEditRow(i)">
-                  <span
-                    aria-hidden="true"
-                    class="absolute inset-0 pointer-events-none rounded-[inherit]"
-                    style="
-                      background: linear-gradient(
-                        178.94deg,
-                        rgba(208, 217, 226, 0.1) 0.467%,
-                        rgba(255, 255, 255, 0.1) 96.1%
-                      );
-                    " />
-                  <UiSvgIcon src="/icons/pen.svg" class="size-5 relative" />
+                  <UiSvgIcon src="/icons/edit.svg" class="size-5 relative" />
                   <span class="relative">Edit Milestone</span>
                 </button>
               </div>
@@ -971,35 +950,17 @@ const onSubmit = handleSubmit(
     <div class="flex items-end justify-between pb-[72px]">
       <button
         type="button"
-        class="relative flex items-center gap-2 rounded-full border border-[#156bb7] px-6 py-3 text-[18px] font-semibold uppercase text-white overflow-hidden shadow-[inset_0px_4px_8px_0px_rgba(0,0,0,0.25)] transition-opacity hover:opacity-80"
+        class="relative flex items-center gap-2 rounded-full border border-[#156bb7] px-6 py-3 text-[18px] font-semibold uppercase text-white overflow-hidden shadow-[inset_0px_8px_12px_-4px_rgba(0,0,0,0.5)] transition-opacity hover:opacity-80"
+        style="background: linear-gradient(0deg, #21384f 0%, #21384f 50%, #21384f 100%);"
         @click="emit('back')">
-        <span
-          aria-hidden="true"
-          class="absolute inset-0 pointer-events-none rounded-[inherit]"
-          style="
-            background: linear-gradient(
-              178.13deg,
-              rgba(208, 217, 226, 0.1) 0.467%,
-              rgba(255, 255, 255, 0.1) 96.1%
-            );
-          " />
         <ArrowLeft :size="24" />
         Back
       </button>
       <div class="flex items-center gap-4">
         <button
           type="button"
-          class="relative flex items-center gap-2 rounded-full border border-[#156bb7] px-6 py-3 text-[18px] font-semibold uppercase text-white overflow-hidden shadow-[inset_0px_4px_8px_0px_rgba(0,0,0,0.25)] transition-opacity hover:opacity-80">
-          <span
-            aria-hidden="true"
-            class="absolute inset-0 pointer-events-none rounded-[inherit]"
-            style="
-              background: linear-gradient(
-                178.07deg,
-                rgba(208, 217, 226, 0.1) 0.467%,
-                rgba(255, 255, 255, 0.1) 96.1%
-              );
-            " />
+          class="relative flex items-center gap-2 rounded-full border border-[#156bb7] px-6 py-3 text-[18px] font-semibold uppercase text-white overflow-hidden shadow-[inset_0px_8px_12px_-4px_rgba(0,0,0,0.5)] transition-opacity hover:opacity-80"
+          style="background: linear-gradient(0deg, #21384f 0%, #21384f 50%, #21384f 100%);">
           <UiSvgIcon src="/icons/save.svg" class="size-6 relative" />
           <span class="relative">Save</span>
         </button>

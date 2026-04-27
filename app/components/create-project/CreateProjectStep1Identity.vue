@@ -371,18 +371,9 @@ const onSubmit = handleSubmit((data) => {
       <div class="flex justify-end">
         <button
           type="button"
-          class="relative flex gap-2 items-center px-6 py-3 border border-[#156bb7] rounded-full text-white text-[18px] font-semibold uppercase overflow-hidden shadow-[inset_0px_4px_8px_0px_rgba(0,0,0,0.25)] transition-opacity hover:opacity-80"
+          class="relative flex gap-2 items-center px-6 py-3 border border-[#156bb7] rounded-full text-white text-[18px] font-semibold uppercase overflow-hidden shadow-[inset_0px_8px_12px_-4px_rgba(0,0,0,0.5)] transition-opacity hover:opacity-80"
+          style="background: linear-gradient(0deg, #21384f 0%, #21384f 50%, #21384f 100%);"
           @click="addTeamMember({ name: '', role: '', bio: '', links: '' })">
-          <span
-            aria-hidden="true"
-            class="absolute inset-0 pointer-events-none rounded-[inherit]"
-            style="
-              background: linear-gradient(
-                179.03deg,
-                rgba(208, 217, 226, 0.1) 0.467%,
-                rgba(255, 255, 255, 0.1) 96.1%
-              );
-            " />
           <Plus :size="24" class="relative" />
           <span class="relative">Add team member</span>
         </button>
@@ -393,18 +384,9 @@ const onSubmit = handleSubmit((data) => {
     <div class="flex items-end justify-between py-6">
       <button
         type="button"
-        class="relative flex gap-2 items-center px-6 py-3 border border-[#156bb7] rounded-full text-white text-[18px] font-semibold uppercase overflow-hidden shadow-[inset_0px_4px_8px_0px_rgba(0,0,0,0.25)] transition-opacity hover:opacity-80"
+        class="relative flex gap-2 items-center px-6 py-3 border border-[#156bb7] rounded-full text-white text-[18px] font-semibold uppercase overflow-hidden shadow-[inset_0px_8px_12px_-4px_rgba(0,0,0,0.5)] transition-opacity hover:opacity-80"
+        style="background: linear-gradient(0deg, #21384f 0%, #21384f 50%, #21384f 100%);"
         @click="emit('back')">
-        <span
-          aria-hidden="true"
-          class="absolute inset-0 pointer-events-none rounded-[inherit]"
-          style="
-            background: linear-gradient(
-              178.13deg,
-              rgba(208, 217, 226, 0.1) 0.467%,
-              rgba(255, 255, 255, 0.1) 96.1%
-            );
-          " />
         <ArrowLeft :size="24" class="relative" />
         <span class="relative">Back</span>
       </button>

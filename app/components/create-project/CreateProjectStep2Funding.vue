@@ -422,35 +422,17 @@ const onSubmit = handleSubmit((data) => {
     <div class="flex items-end justify-between pb-[72px]">
       <button
         type="button"
-        class="relative flex items-center gap-2 rounded-full border border-[#156bb7] px-6 py-3 text-[18px] font-semibold uppercase text-white overflow-hidden shadow-[inset_0px_4px_8px_0px_rgba(0,0,0,0.25)] transition-opacity hover:opacity-80"
+        class="relative flex items-center gap-2 rounded-full border border-[#156bb7] px-6 py-3 text-[18px] font-semibold uppercase text-white overflow-hidden shadow-[inset_0px_8px_12px_-4px_rgba(0,0,0,0.5)] transition-opacity hover:opacity-80"
+        style="background: linear-gradient(0deg, #21384f 0%, #21384f 50%, #21384f 100%);"
         @click="emit('back')">
-        <span
-          aria-hidden="true"
-          class="absolute inset-0 pointer-events-none rounded-[inherit]"
-          style="
-            background: linear-gradient(
-              178.13deg,
-              rgba(208, 217, 226, 0.1) 0.467%,
-              rgba(255, 255, 255, 0.1) 96.1%
-            );
-          " />
         <ArrowLeft :size="24" />
         Back
       </button>
       <div class="flex items-center gap-4 mt-10">
         <button
           type="button"
-          class="relative flex items-center gap-2 rounded-full border border-[#156bb7] px-6 py-3 text-[18px] font-semibold uppercase text-white overflow-hidden shadow-[inset_0px_4px_8px_0px_rgba(0,0,0,0.25)] transition-opacity hover:opacity-80">
-          <span
-            aria-hidden="true"
-            class="absolute inset-0 pointer-events-none rounded-[inherit]"
-            style="
-              background: linear-gradient(
-                178.07deg,
-                rgba(208, 217, 226, 0.1) 0.467%,
-                rgba(255, 255, 255, 0.1) 96.1%
-              );
-            " />
+          class="relative flex items-center gap-2 rounded-full border border-[#156bb7] px-6 py-3 text-[18px] font-semibold uppercase text-white overflow-hidden shadow-[inset_0px_8px_12px_-4px_rgba(0,0,0,0.5)] transition-opacity hover:opacity-80"
+          style="background: linear-gradient(0deg, #21384f 0%, #21384f 50%, #21384f 100%);">
           <UiSvgIcon src="/icons/save.svg" class="size-6 relative" />
           <span class="relative">Save</span>
         </button>

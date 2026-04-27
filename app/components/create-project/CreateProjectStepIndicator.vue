@@ -39,7 +39,7 @@ const steps = [
             stroke-linejoin="round"
           />
         </svg>
-        <span v-else class="block leading-none">{{ number }}</span>
+        <span v-else class="block leading-none translate-y-px">{{ number }}</span>
       </div>
       <span class="text-sm text-white">{{ label }}</span>
     </div>
