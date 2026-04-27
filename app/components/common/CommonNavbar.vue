@@ -90,12 +90,13 @@ const activeRole = computed(() => {
               </NuxtLink>
             </div>
 
-            <button
+            <NuxtLink
+              to="/profile"
+              aria-label="Profile"
               class="size-14 rounded-full border border-[#156bb7] overflow-hidden shrink-0"
-              @click="isConnected = false"
             >
               <img src="/person/avatar.jpg" alt="Profile" class="size-full object-cover">
-            </button>
+            </NuxtLink>
           </div>
         </template>
 
